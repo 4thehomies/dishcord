@@ -366,7 +366,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
 </main>
 
 <div class="cta-bar" id="ctaBar">
-  <button type="button" class="primary" id="ctaBtn">I'm going!</button>
+  <button type="button" class="primary" id="ctaBtn">I'm coming!</button>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -399,7 +399,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     </div>
     <p class="form-err" id="formErr" role="alert"></p>
     <div class="sheet-actions">
-      <button type="submit" class="primary" id="saveBtn">I'm going!</button>
+      <button type="submit" class="primary" id="saveBtn">I'm coming!</button>
       <button type="button" class="danger-link" id="removeBtn" hidden>Remove this RSVP</button>
     </div>
   </form>
@@ -500,7 +500,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   // Paste your Firebase web app settings here. While this is null, the page saves
   // entries only in each visitor's own browser.
   const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyAl•••••••••••••••••••••••••••••••",
+    apiKey: "AIzaSyAlYJMqkYgrdURSVch_hyJ8qLO0CGc6nE0",
     authDomain: "dishcord-61918.firebaseapp.com",
     projectId: "dishcord-61918",
     storageBucket: "dishcord-61918.firebasestorage.app",
@@ -509,32 +509,79 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   };
   const FIREBASE_SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
 
-  async function firebaseStore() {
-    const { initializeApp } = await import(FIREBASE_SDK + "firebase-app.js");
-    const fs = await import(FIREBASE_SDK + "firebase-firestore.js");
-    const app = initializeApp(FIREBASE_CONFIG);
-    const col = fs.collection(fs.getFirestore(app), "guests");
+  // Firestore REST values -> plain JSON
+  function fromFs(v) {
+    if (!v || typeof v !== "object") return null;
+    if ("stringValue" in v) return v.stringValue;
+    if ("integerValue" in v) return Number(v.integerValue);
+    if ("doubleValue" in v) return v.doubleValue;
+    if ("booleanValue" in v) return v.booleanValue;
+    if ("arrayValue" in v) return (v.arrayValue.values || []).map(fromFs);
+    if ("mapValue" in v) return Object.fromEntries(Object.entries(v.mapValue.fields || {}).map(([k, x]) => [k, fromFs(x)]));
+    return null;
+  }
+
+  function firebaseStore() {
+    let live = false;
+    const timer = setTimeout(() => { state.slow = true; render(); }, 10000);
+    const loaded = () => {
+      clearTimeout(timer);
+      state.slow = false;
+      state.loadError = null;
+      if (state.mode === "loading") state.mode = "shared";
+      render();
+    };
+
+    // 1. Fast first load: one plain HTTPS request, so the table fills in about a second.
+    const url = "https://firestore.googleapis.com/v1/projects/" + FIREBASE_CONFIG.projectId +
+      "/databases/(default)/documents/guests?pageSize=300&key=" + FIREBASE_CONFIG.apiKey;
+    fetch(url)
+      .then(r => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then(j => {
+        if (live) return;
+        setGuests((j.documents || []).map(d => clean(d.name.split("/").pop(), fromFs({ mapValue: { fields: d.fields } }))));
+        loaded();
+      })
+      .catch(() => {});
+
+    // 2. Live updates and saving through the Firebase library.
+    //    Long polling avoids the 30–40 second stall some phones and networks have with streaming.
+    const sdk = (async () => {
+      const [{ initializeApp }, fs] = await Promise.all([
+        import(FIREBASE_SDK + "firebase-app.js"),
+        import(FIREBASE_SDK + "firebase-firestore.js"),
+      ]);
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = fs.initializeFirestore(app, { experimentalForceLongPolling: true });
+      const col = fs.collection(db, "guests");
+      fs.onSnapshot(col, snap => {
+        if (snap.metadata.fromCache && !live) return;
+        live = true;
+        setGuests(snap.docs.map(d => clean(d.id, d.data())));
+        loaded();
+      }, () => {
+        if (state.mode !== "loading") return; // the first load worked; keep showing it
+        clearTimeout(timer);
+        state.slow = false;
+        state.loadError = "error";
+        render();
+      });
+      return { fs, col };
+    })();
+    sdk.catch(() => {});
+
     return {
-      start() {
-        const timer = setTimeout(() => { state.slow = true; render(); }, 10000);
-        fs.onSnapshot(col, snap => {
-          setGuests(snap.docs.map(d => clean(d.id, d.data())));
-          if (!snap.metadata.fromCache) { clearTimeout(timer); state.slow = false; }
-          if (state.mode === "loading") state.mode = "shared";
-          render();
-        }, () => {
-          clearTimeout(timer);
-          state.slow = false;
-          state.loadError = "error";
-          render();
-        });
-      },
+      start() {},
       async save(id, data) {
+        const { fs, col } = await sdk;
         const ref = id ? fs.doc(col, id) : fs.doc(col);
         await fs.setDoc(ref, data);
         return ref.id;
       },
-      async remove(id) { await fs.deleteDoc(fs.doc(col, id)); },
+      async remove(id) {
+        const { fs, col } = await sdk;
+        await fs.deleteDoc(fs.doc(col, id));
+      },
     };
   }
 
@@ -793,7 +840,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     });
 
     if (!n) {
-      const msg = state.mode === "loading" ? "Setting the table…" : "No one is here yet. Tap I'm going! below to take the first seat.";
+      const msg = state.mode === "loading" ? "Setting the table…" : "No one is here yet. Tap I'm coming! below to take the first seat.";
       table.append(el("p", "table-empty", msg));
     } else if (!plates.length) {
       table.append(el("p", "table-empty", "Plates appear here as people add dishes."));
@@ -879,7 +926,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     const mine = state.guests.find(isMine);
     const bar = $("ctaBar");
     bar.hidden = !canJoin() || state.mode === "loading";
-    $("ctaBtn").textContent = mine ? "Edit my RSVP" : "I'm going!";
+    $("ctaBtn").textContent = mine ? "Edit my RSVP" : "I'm coming!";
   }
 
   // ---------- RSVP form ----------
@@ -972,7 +1019,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     editing = g;
     const mine = g && isMine(g);
     $("rsvpTitle").textContent = !g ? "Save your seat" : mine ? "Edit your RSVP" : `Edit ${firstName(g.name)}'s RSVP`;
-    $("saveBtn").textContent = g ? "Save changes" : "I'm going!";
+    $("saveBtn").textContent = g ? "Save changes" : "I'm coming!";
     $("f-name").value = g ? g.name : "";
     $("f-note").value = g ? g.note : "";
     $("personRows").replaceChildren();
@@ -1121,13 +1168,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     render();
     const hasViewer = !!(window.claude && typeof window.claude.use === "function");
     if (!hasViewer && FIREBASE_CONFIG) {
-      try {
-        store = await firebaseStore();
-        store.start();
-      } catch {
-        state.loadError = "error";
-        render();
-      }
+      store = firebaseStore();
       return;
     }
     if (!hasViewer) {
