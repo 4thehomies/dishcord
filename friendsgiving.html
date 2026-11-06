@@ -1,0 +1,1114 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dishcord</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: one narrow column. A tall wooden table seen from above is the hero: guests' chairs drift around it, round plates scatter across it. Bottom sheet for entry. */
+:root {
+  --bg: #F2EBE2;
+  --surface: #FFFAF4;
+  --ink: #2B211B;
+  --muted: #6E5F53;
+  --line: #DCCFC0;
+  --accent: #B4501B;
+  --accent-ink: #FFFFFF;
+  --wood: #A26C44;
+  --wood-edge: #7A4A2A;
+  --plate: #FFFDF9;
+  --plate-edge: #E2D6C8;
+  --chair: #FFF8EF;
+  --chair-taken: #F1DCC5;
+  --grp-1: #F2C7A0; --grp-2: #CFDBA9; --grp-3: #E8BDB6; --grp-4: #E6D49A; --grp-5: #D6C2D6;
+  --chair-edge: #86573A;
+  --blurple: #5865F2;
+  --online: #2F9E55;
+  --shadow: rgb(60 35 15 / 0.22);
+  --scrim: rgb(25 15 8 / 0.5);
+  --c-main: #9C2F2F;
+  --c-side: #6B7B34;
+  --c-dessert: #D27A26;
+  --c-drinks: #6A3D5A;
+  --c-other: #8C7A66;
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1B1612; --surface: #27201A; --ink: #F1E8DE; --muted: #B3A393; --line: #41362D;
+    --accent: #E8834A; --accent-ink: #1E1006;
+    --wood: #5B3B25; --wood-edge: #3E2817; --plate: #ECE4D9; --plate-edge: #C9BBAB;
+    --chair: #2E2620; --chair-taken: #4A3A2C; --chair-edge: #C08A5E;
+    --grp-1: #7A4E2E; --grp-2: #55602F; --grp-3: #6E3B36; --grp-4: #6B5A2A; --grp-5: #5A4258;
+    --blurple: #8C96F8; --online: #43B581;
+    --shadow: rgb(0 0 0 / 0.5); --scrim: rgb(0 0 0 / 0.6);
+    --c-main: #B83A3A; --c-side: #7E8F3E; --c-dessert: #E0883A; --c-drinks: #8A5279; --c-other: #9C8A76;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1B1612; --surface: #27201A; --ink: #F1E8DE; --muted: #B3A393; --line: #41362D;
+  --accent: #E8834A; --accent-ink: #1E1006;
+  --wood: #5B3B25; --wood-edge: #3E2817; --plate: #ECE4D9; --plate-edge: #C9BBAB;
+  --chair: #2E2620; --chair-taken: #4A3A2C; --chair-edge: #C08A5E;
+    --grp-1: #7A4E2E; --grp-2: #55602F; --grp-3: #6E3B36; --grp-4: #6B5A2A; --grp-5: #5A4258;
+  --blurple: #8C96F8; --online: #43B581;
+  --shadow: rgb(0 0 0 / 0.5); --scrim: rgb(0 0 0 / 0.6);
+  --c-main: #B83A3A; --c-side: #7E8F3E; --c-dessert: #E0883A; --c-drinks: #8A5279; --c-other: #9C8A76;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 120px;
+}
+main { max-width: 460px; margin: 0 auto; display: grid; gap: 22px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Header */
+.head-block { display: grid; gap: 6px; }
+.event-name { margin: 4px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; line-height: 1.2; text-wrap: balance; }
+.hash { color: var(--blurple); font-weight: 800; margin-right: 3px; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 9vw, 2.8rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+.meta { margin: 0; color: var(--muted); font-weight: 700; }
+.meta:empty { display: none; }
+.link-btn {
+  background: none; border: 0; padding: 4px 0; color: var(--accent);
+  font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; justify-self: start;
+}
+.notice {
+  margin: 0; padding: 10px 12px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: 14px;
+}
+
+/* Table scene: positions are computed in script so the party can sprawl a little */
+.scene { position: relative; width: 100%; min-height: 360px; }
+.tabletop {
+  position: absolute;
+  border-radius: 28px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 26px, color-mix(in srgb, var(--wood-edge) 22%, transparent) 26px 27px, transparent 27px 41px, color-mix(in srgb, var(--wood-edge) 14%, transparent) 41px 42px),
+    var(--wood);
+  box-shadow: inset 0 0 0 4px var(--wood-edge), 0 10px 24px var(--shadow);
+}
+.table-empty {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  margin: 0; width: 80%; text-align: center; font-size: 14px;
+  padding: 8px 10px; border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent); color: var(--muted);
+}
+
+.seat {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: 0; padding: 2px; cursor: pointer;
+  transform: translate(-50%, -25px);
+  -webkit-tap-highlight-color: transparent;
+}
+.seat.at-top { flex-direction: column-reverse; transform: translate(-50%, calc(-100% + 25px)); }
+.chair {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border-radius: 13px;
+  background: var(--chair-taken);
+  border: 2px solid var(--chair-edge);
+  font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--ink);
+  transform: rotate(var(--r, 0deg));
+  box-shadow: 0 2px 4px var(--shadow);
+  transition: transform 0.15s ease;
+}
+/* thick outer edge = the chair's backrest, facing away from the table */
+.at-left .chair { border-left-width: 7px; }
+.at-right .chair { border-right-width: 7px; }
+.at-top .chair { border-top-width: 7px; }
+.at-bottom .chair { border-bottom-width: 7px; }
+.chair { position: relative; }
+.chair::after {
+  content: ""; position: absolute; right: -6px; bottom: -6px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--online); border: 2.5px solid var(--bg);
+}
+.seat.grp .chair { background: var(--grp); }
+.seat.mine .chair { background: var(--accent); border-color: color-mix(in srgb, var(--accent) 70%, var(--ink)); color: var(--accent-ink); }
+.seat:active .chair { transform: rotate(var(--r, 0deg)) scale(0.94); }
+.seat-name {
+  font-size: 12px; line-height: 1.2; max-width: 74px; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.seat.mine .seat-name { font-weight: 700; }
+
+.plate {
+  position: absolute; z-index: 1;
+  width: 86px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  transform: translate(-50%, calc(var(--h) / -2));
+  -webkit-tap-highlight-color: transparent;
+}
+/* One shape per serving dish, seen from above. Fill = the food, edge = the dish. */
+.vessel {
+  --fill: color-mix(in srgb, var(--cat) 62%, var(--plate));
+  --rim: color-mix(in srgb, var(--cat) 75%, #2B1A10);
+  position: relative;
+  width: var(--w); height: var(--h);
+  background: var(--fill);
+  border: 2px solid var(--rim);
+  box-shadow: 0 3px 6px var(--shadow);
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.15s ease;
+}
+.plate:active .vessel { transform: rotate(var(--r, 0deg)) scale(0.94); }
+.v-plate, .v-platter { border-radius: 50%; }
+.v-plate { background: var(--plate); border: 3px solid var(--fill); }
+.v-bowl { border-radius: 50%; border-width: 4px; }
+.v-pie { border-radius: 50%; border-width: 4px; }
+.v-pan { border-radius: 6px; }
+.v-baking { border-radius: 8px; }
+.v-basket { border-radius: 16px; }
+.v-pitcher { border-radius: 50%; }
+.v-bottles { background: none; border: 0; box-shadow: none; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.v-bottles span { width: 18px; height: 18px; border-radius: 50%; background: var(--fill); border: 2px solid var(--rim); box-shadow: 0 2px 4px var(--shadow); }
+.plate-label {
+  max-width: 82px;
+  font-size: 11px; line-height: 1.15; font-weight: 700; text-align: center; color: var(--ink);
+  padding: 2px 6px; border-radius: 7px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.k-main { --cat: var(--c-main); }
+.k-side { --cat: var(--c-side); }
+.k-dessert { --cat: var(--c-dessert); }
+.k-drinks { --cat: var(--c-drinks); }
+.k-other { --cat: var(--c-other); }
+
+/* List */
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cat); flex: none; }
+.menu { display: grid; gap: 14px; }
+.menu h2, .section-title {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; margin: 0; letter-spacing: -0.01em;
+}
+.menu-group { display: grid; gap: 4px; }
+.menu-group h3 {
+  margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+}
+.menu-group h3::before {
+  content: ""; width: 5px; height: 5px; margin: -4px 3px 0 1px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg);
+}
+.menu-group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.menu-group li { border-bottom: 1px solid var(--line); }
+.menu-group button {
+  width: 100%; display: flex; justify-content: space-between; gap: 12px;
+  padding: 10px 2px; background: none; border: 0; text-align: left; cursor: pointer;
+}
+.menu-group .d { font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+.menu-group .d::before { content: "#"; margin-right: 7px; font-weight: 400; color: var(--muted); }
+.menu-group .p { color: var(--muted); flex: none; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Sticky action bar */
+.cta-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+  display: flex; justify-content: center;
+}
+.primary {
+  width: 100%; max-width: 460px;
+  min-height: 52px; border: 0; border-radius: 14px;
+  background: var(--accent); color: var(--accent-ink);
+  font-family: var(--font-display); font-weight: 800; font-size: 1.1rem;
+  cursor: pointer; box-shadow: 0 4px 12px var(--shadow);
+}
+.primary:disabled { opacity: 0.6; cursor: default; }
+
+/* Bottom sheets */
+dialog.sheet {
+  margin: auto auto 0; padding: 0; border: 0;
+  width: 100%; max-width: 520px; max-height: 92dvh;
+  border-radius: 20px 20px 0 0;
+  background: var(--surface); color: var(--ink);
+  box-shadow: 0 -8px 30px var(--shadow);
+}
+dialog.sheet::backdrop { background: var(--scrim); }
+@media (min-width: 600px) { dialog.sheet { margin: auto; border-radius: 20px; } }
+.sheet-inner {
+  display: grid; gap: 16px;
+  padding: 18px max(18px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+}
+.sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.sheet-head h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
+.close-btn {
+  flex: none; width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-size: 20px; line-height: 1;
+}
+.field { display: grid; gap: 6px; }
+.field > label, .lbl, legend { font-weight: 700; font-size: 15px; }
+.opt { font-weight: 400; color: var(--muted); }
+input[type="text"] {
+  width: 100%; min-height: 48px; padding: 10px 12px;
+  font: inherit; font-size: 16px; color: var(--ink);
+  background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px;
+}
+input[type="text"]:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; min-width: 0; }
+legend { padding: 0; margin-bottom: 6px; }
+
+.field-help { margin: -4px 0 0; color: var(--muted); font-size: 14px; }
+.person-rows { display: grid; gap: 8px; }
+.person-rows:empty { display: none; }
+
+.dish-row { display: grid; gap: 8px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); }
+.dish-line { display: flex; gap: 8px; }
+.row-x {
+  flex: none; width: 48px; border-radius: 12px; border: 1.5px solid var(--line);
+  background: var(--bg); cursor: pointer; font-size: 20px;
+}
+.kinds { display: flex; flex-wrap: wrap; gap: 6px; }
+.kind-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 4px 12px; border-radius: 999px;
+  border: 1.5px solid var(--line); background: transparent; cursor: pointer; font-size: 14px;
+}
+.kind-chip[aria-pressed="true"] { border-color: var(--cat); background: color-mix(in srgb, var(--cat) 16%, transparent); font-weight: 700; }
+.add-dish { justify-self: start; }
+
+.form-err { margin: 0; color: var(--accent); font-weight: 700; }
+.form-err:empty { display: none; }
+.sheet-actions { display: grid; gap: 8px; }
+.sheet-actions .primary { max-width: none; box-shadow: none; }
+.danger-link { justify-self: center; background: none; border: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; padding: 8px; cursor: pointer; }
+.danger-link.armed { color: var(--accent); font-weight: 700; }
+
+/* Guest sheet, styled like a chat-app profile card */
+dialog.profile { overflow: hidden; }
+.profile-banner { position: relative; height: 76px; background: var(--banner, var(--chair-taken)); }
+.profile-banner .close-btn {
+  position: absolute; top: 12px; right: max(12px, env(safe-area-inset-right, 0px));
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+}
+dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
+.avatars { display: flex; margin-top: -40px; }
+.avatar {
+  position: relative; width: 74px; height: 74px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 5px solid var(--surface);
+  font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--ink);
+}
+.avatar + .avatar { margin-left: -18px; }
+.avatar::after {
+  content: ""; position: absolute; right: 1px; bottom: 1px;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--online); border: 3px solid var(--surface);
+}
+.profile-name { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; line-height: 1.1; overflow-wrap: anywhere; }
+.profile-card { display: grid; gap: 14px; padding: 14px; border-radius: 12px; background: var(--bg); }
+.profile-label { margin: 0 0 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.roles { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.roles li {
+  display: inline-flex; align-items: center; gap: 6px; min-width: 0;
+  padding: 4px 10px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--line);
+  font-size: 14px; font-weight: 700; overflow-wrap: anywhere;
+}
+.profile-note { margin: 0; overflow-wrap: anywhere; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); z-index: 20;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px); width: max-content;
+  padding: 10px 16px; border-radius: 12px;
+  background: var(--ink); color: var(--bg); font-weight: 700;
+  box-shadow: 0 6px 18px var(--shadow);
+}
+
+@media (prefers-reduced-motion: reduce) { .chair, .vessel { transition: none; } }
+</style>
+
+<main>
+  <header class="head-block">
+    <h1 id="evTitle"><span class="hash" aria-hidden="true">#</span>Dishcord</h1>
+    <p class="event-name">Friendsgiving at Sharon &amp; Trenton's House</p>
+    <p class="meta">Sunday, November 22, 2026 · 2:00 pm</p>
+    <p class="notice" id="notice" hidden></p>
+  </header>
+
+  <section aria-label="The table, seen from above">
+    <div class="scene" id="scene"></div>
+  </section>
+
+  <section class="menu" id="menu" aria-labelledby="menuTitle">
+    <h2 id="menuTitle"><span class="hash" aria-hidden="true">#</span>whos-bringing-what</h2>
+    <div id="menuBody"></div>
+  </section>
+</main>
+
+<div class="cta-bar" id="ctaBar">
+  <button type="button" class="primary" id="ctaBtn">I'm coming!</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- RSVP form -->
+<dialog class="sheet" id="rsvpDlg" aria-labelledby="rsvpTitle">
+  <form class="sheet-inner" id="rsvpForm" novalidate>
+    <div class="sheet-head">
+      <h2 id="rsvpTitle">Save your seat</h2>
+      <button type="button" class="close-btn" data-close aria-label="Close">×</button>
+    </div>
+    <div class="field">
+      <label for="f-name">Your name</label>
+      <input type="text" id="f-name" maxlength="40" autocomplete="given-name" enterkeyhint="next" placeholder="First name is fine">
+    </div>
+    <fieldset>
+      <legend>Who is coming with you?</legend>
+      <p class="field-help">Add each person by name so everyone gets a chair.</p>
+      <div class="person-rows" id="personRows"></div>
+      <button type="button" class="link-btn add-dish" id="addPerson">+ Add a person</button>
+    </fieldset>
+    <fieldset>
+      <legend>What are you bringing?</legend>
+      <div id="dishRows" style="display:grid;gap:10px"></div>
+      <button type="button" class="link-btn add-dish" id="addDish">+ Add another dish</button>
+    </fieldset>
+    <div class="field">
+      <label for="f-note">Notes <span class="opt">(optional)</span></label>
+      <input type="text" id="f-note" maxlength="140" placeholder="Allergies, arriving late, need oven space">
+    </div>
+    <p class="form-err" id="formErr" role="alert"></p>
+    <div class="sheet-actions">
+      <button type="submit" class="primary" id="saveBtn">I'm coming!</button>
+      <button type="button" class="danger-link" id="removeBtn" hidden>Remove this RSVP</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Guest details -->
+<dialog class="sheet profile" id="infoDlg" aria-labelledby="infoName">
+  <div class="profile-banner">
+    <button type="button" class="close-btn" data-close aria-label="Close">×</button>
+  </div>
+  <div class="sheet-inner">
+    <div class="avatars" id="infoAvatars" aria-hidden="true"></div>
+    <h2 class="profile-name" id="infoName"></h2>
+    <div class="profile-card">
+      <div>
+        <p class="profile-label">Bringing</p>
+        <ul class="roles" id="infoDishes"></ul>
+      </div>
+      <div id="infoNoteWrap" hidden>
+        <p class="profile-label">Note</p>
+        <p class="profile-note" id="infoNote"></p>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button type="button" class="primary" id="infoEdit">Edit this RSVP</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const KINDS = [
+    { id: "main", label: "Main" },
+    { id: "side", label: "Side" },
+    { id: "dessert", label: "Dessert" },
+    { id: "drinks", label: "Drinks" },
+    { id: "other", label: "Other" },
+  ];
+  const KIND_IDS = KINDS.map(k => k.id);
+  const kindLabel = id => (KINDS.find(k => k.id === id) || KINDS[4]).label;
+  const MAX_PARTY = 8;
+  const MAX_DISHES = 5;
+  const $ = id => document.getElementById(id);
+
+  const state = {
+    mode: "loading",      // loading | shared | local | signedout
+    guests: [],
+    canWrite: true,
+    isHost: false,
+    me: null,
+    slow: false,
+  };
+
+  // ---------- per-device memory of "my" entries ----------
+  const MINE_KEY = "fg-mine-v1";
+  function readMine() {
+    try { const v = JSON.parse(localStorage.getItem(MINE_KEY) || "[]"); return Array.isArray(v) ? v : []; }
+    catch { return []; }
+  }
+  function markMine(id) {
+    const m = readMine();
+    if (!m.includes(id)) m.push(id);
+    try { localStorage.setItem(MINE_KEY, JSON.stringify(m)); } catch {}
+  }
+  function unmarkMine(id) {
+    try { localStorage.setItem(MINE_KEY, JSON.stringify(readMine().filter(x => x !== id))); } catch {}
+  }
+  const isMine = g => !g.demo && (readMine().includes(g.id) || (!!state.me && g.by === state.me));
+
+  // ---------- data cleaning (shared data is untrusted) ----------
+  function clean(id, d) {
+    if (!d || typeof d !== "object") return null;
+    const name = String(d.name || "").trim().slice(0, 40);
+    if (!name) return null;
+    const others = Array.isArray(d.others)
+      ? d.others.map(x => String(x || "").trim().slice(0, 40)).filter(Boolean).slice(0, MAX_PARTY - 1)
+      : [];
+    let party = parseInt(d.party, 10);
+    if (!(party >= 1)) party = 1;
+    party = others.length ? 1 + others.length : Math.min(party, MAX_PARTY);
+    const dishes = Array.isArray(d.dishes)
+      ? d.dishes.slice(0, MAX_DISHES).map(x => ({
+          name: String((x && x.name) || "").trim().slice(0, 60),
+          kind: KIND_IDS.includes(x && x.kind) ? x.kind : "other",
+        })).filter(x => x.name)
+      : [];
+    return {
+      id, name, party, others, dishes,
+      note: String(d.note || "").trim().slice(0, 140),
+      createdAt: Number(d.createdAt) || 0,
+      by: typeof d.by === "string" ? d.by : null,
+    };
+  }
+  // ---------- demo guests for testing (built into the page, never saved) ----------
+  // Set DEMO_MODE to false before you share the link with friends.
+  const DEMO_MODE = true;
+  const DEMO_DATA = [
+    { id: "demo-01", name: "Maya", others: [], dishes: [{ name: "Roast turkey", kind: "main" }] },
+    { id: "demo-02", name: "Jordan", others: ["Riley"], dishes: [{ name: "Green bean casserole", kind: "side" }, { name: "Apple cider", kind: "drinks" }] },
+    { id: "demo-03", name: "Priya", others: [], dishes: [{ name: "Pumpkin pie", kind: "dessert" }] },
+    { id: "demo-04", name: "Leo", others: [], dishes: [{ name: "Mac and cheese", kind: "side" }] },
+    { id: "demo-05", name: "Sam", others: ["Alex"], dishes: [{ name: "Cranberry sauce", kind: "side" }, { name: "Red wine", kind: "drinks" }] },
+    { id: "demo-06", name: "Ava", others: [], dishes: [{ name: "Dinner rolls", kind: "other" }] },
+    { id: "demo-07", name: "Marcus", others: [], dishes: [{ name: "Mashed potatoes", kind: "side" }, { name: "Brownies", kind: "dessert" }] },
+    { id: "demo-08", name: "Nina", others: [], dishes: [{ name: "Kale salad", kind: "side" }, { name: "Pecan pie", kind: "dessert" }] },
+  ];
+  const DEMO_GUESTS = DEMO_MODE
+    ? DEMO_DATA.map((d, i) => ({ ...clean(d.id, { ...d, note: "Demo guest", createdAt: i + 1 }), demo: true }))
+    : [];
+
+  function setGuests(list) {
+    state.guests = [...DEMO_GUESTS, ...list].filter(Boolean).sort((a, b) => (a.createdAt - b.createdAt) || (a.id < b.id ? -1 : 1));
+  }
+  // ---------- storage: shared (db) or this-browser-only (local) ----------
+  let store = null;
+
+  function localStore() {
+    const KEY = "fg-local-v1";
+    const load = () => {
+      try { const v = JSON.parse(localStorage.getItem(KEY) || "{}"); return v && typeof v === "object" ? v : {}; }
+      catch { return {}; }
+    };
+    const persist = v => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch {} };
+    const sync = () => {
+      const v = load();
+      setGuests(Object.entries(v.guests || {}).map(([id, d]) => clean(id, d)));
+      render();
+    };
+    return {
+      start: sync,
+      async save(id, data) {
+        const v = load(); v.guests = v.guests || {};
+        id = id || "g" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        v.guests[id] = data; persist(v); sync(); return id;
+      },
+      async remove(id) { const v = load(); if (v.guests) delete v.guests[id]; persist(v); sync(); },
+    };
+  }
+
+  function sharedStore(db) {
+    const col = db.collection("guests");
+    const retry = async fn => {
+      try { return await fn(); }
+      catch (e) {
+        if (e && e.code === "unavailable") {
+          await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
+          return fn();
+        }
+        throw e;
+      }
+    };
+    return {
+      start() {
+        const timer = setTimeout(() => { state.slow = true; render(); }, 10000);
+        col.onSnapshot(snap => {
+          setGuests(snap.docs.map(d => clean(d.id, d.data())));
+          if (!snap.metadata.fromCache) { clearTimeout(timer); state.slow = false; }
+          if (state.mode === "loading") state.mode = "shared";
+          render();
+        }, err => {
+          clearTimeout(timer);
+          state.slow = false;
+          state.loadError = err && err.code === "revoked" ? "revoked" : "error";
+          render();
+        });
+      },
+      async save(id, data) {
+        const ref = id ? col.doc(id) : col.doc();
+        await retry(() => ref.set(data));
+        return ref.id;
+      },
+      async remove(id) { await retry(() => col.doc(id).delete()); },
+    };
+  }
+
+  function writeErrorMessage(err) {
+    const code = err && err.code;
+    if (code === "invalid_argument" || code === "not_granted" || code === "revoked") {
+      state.canWrite = false; render();
+      return "Your link lets you see the table but not change it. Ask the host to add you as an editor.";
+    }
+    if (code === "quota_exceeded") return "The guest list is full. Ask the host to remove old entries.";
+    return "That didn't save. Check your connection and try again.";
+  }
+
+  // ---------- helpers ----------
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const firstName = s => s.trim().split(/\s+/)[0];
+  const initials = s => {
+    const parts = s.trim().split(/\s+/).filter(Boolean);
+    const a = parts[0] ? Array.from(parts[0])[0] : "";
+    const b = parts[1] ? Array.from(parts[1])[0] : "";
+    return (a + b).toUpperCase() || "?";
+  };
+  const canJoin = () => state.mode !== "signedout" && state.canWrite && !state.loadError;
+
+  let toastTimer;
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+  }
+
+  // ---------- render ----------
+  function render() {
+    renderHeader();
+    renderTable();
+    renderMenu();
+    renderCta();
+  }
+
+  function renderHeader() {
+    const n = $("notice");
+    let msg = "";
+    if (state.mode === "signedout") msg = "Sign in to claude.ai to see who's coming and save your seat.";
+    else if (state.loadError === "revoked") msg = "You no longer have access to this table.";
+    else if (state.loadError) msg = "The guest list didn't load. Reload the page to try again.";
+    else if (state.slow) msg = "Still loading the guest list. Check your connection.";
+    else if (!state.canWrite) msg = "You can see the table but can't change it. Ask the host to add you as an editor.";
+    n.textContent = msg; n.hidden = !msg;
+  }
+
+  // Stable "random" numbers, so the sprawl looks the same on every phone.
+  function hash(str) {
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>>= 0;
+  }
+  const jit = seed => (hash(seed) % 2001) / 1000 - 1; // -1 … 1
+
+  // What the food is served in, guessed from the dish name, then from the type of dish.
+  const VESSELS = {
+    plate:   { w: 58, h: 58 },
+    bowl:    { w: 54, h: 54 },
+    pie:     { w: 60, h: 60 },
+    platter: { w: 80, h: 54 },
+    baking:  { w: 70, h: 50 },
+    pan:     { w: 56, h: 56 },
+    basket:  { w: 66, h: 46 },
+    pitcher: { w: 46, h: 46 },
+    bottles: { w: 66, h: 26 },
+  };
+  const VESSEL_RULES = [
+    [/\b(pie|tart|quiche)/i, "pie"],
+    [/casserole|bake|lasagn|gratin|\bmac\b|stuffing|dressing|enchilada|yams|sweet potato|scalloped/i, "baking"],
+    [/brownie|\bbars?\b|cake|cobbler|crisp|blondie|fudge|cookie/i, "pan"],
+    [/turkey|\bham\b|roast|chicken|brisket|salmon|platter|charcuterie|board|tofurky|prime rib/i, "platter"],
+    [/salad|soup|sauce|gravy|mashed|\bdip\b|chili|cranberr|slaw|beans|chips|popcorn/i, "bowl"],
+    [/bread|\brolls?\b|biscuit|cornbread|muffin|croissant|baguette/i, "basket"],
+    [/wine|beer|soda|seltzer|sparkling|bottle|champagne|kombucha/i, "bottles"],
+    [/cider|punch|juice|lemonade|\btea\b|coffee|sangria|cocktail|water|nog/i, "pitcher"],
+  ];
+  const VESSEL_BY_KIND = {
+    main: ["platter", "baking"],
+    side: ["bowl", "baking", "plate"],
+    dessert: ["pie", "pan", "plate"],
+    drinks: ["pitcher", "bottles"],
+    other: ["plate", "basket", "bowl"],
+  };
+  function vesselFor(d, seed) {
+    let type = (VESSEL_RULES.find(([re]) => re.test(d.name)) || [])[1];
+    if (!type) {
+      const opts = VESSEL_BY_KIND[d.kind] || VESSEL_BY_KIND.other;
+      type = opts[hash(seed + "v") % opts.length];
+    }
+    return { type, ...VESSELS[type] };
+  }
+
+  function seatButton(p, side, mine) {
+    const g = p.g;
+    const b = el("button", "seat at-" + side + (mine ? " mine" : ""));
+    b.type = "button";
+    const chair = el("span", "chair");
+    chair.setAttribute("aria-hidden", "true");
+    const name = el("span", "seat-name");
+    if (p.i === 0) {
+      chair.textContent = initials(g.name);
+      name.textContent = mine ? "You" : firstName(g.name);
+      b.setAttribute("aria-label", g.name + (mine ? " (you)" : "") + ". Tap for details.");
+    } else if (g.others[p.i - 1]) {
+      const who = g.others[p.i - 1];
+      chair.textContent = initials(who);
+      name.textContent = firstName(who);
+      b.setAttribute("aria-label", who + ", coming with " + g.name + ". Tap for details.");
+    } else {
+      chair.textContent = "+" + p.i;
+      name.textContent = "w/ " + firstName(g.name);
+      b.setAttribute("aria-label", "Guest of " + g.name + ". Tap for details.");
+    }
+    b.addEventListener("click", () => (mine && canJoin() ? openForm(g) : openInfo(g)));
+    b.append(chair, name);
+    return b;
+  }
+
+  function renderTable() {
+    const scene = $("scene");
+    const W = scene.clientWidth || 358;
+    lastSceneW = W;
+
+    const people = [];
+    for (const g of state.guests) for (let i = 0; i < g.party; i++) people.push({ g, i });
+    const groupColor = new Map();
+    state.guests.filter(g => g.party > 1).forEach((g, k) => groupColor.set(g.id, (k % 5) + 1));
+    const n = people.length;
+
+    // How the chairs split: heads of the table fill in as the party grows.
+    const heads = n >= 6 ? 2 : (n >= 3 && n % 2 === 1 ? 1 : 0);
+    const rightN = Math.ceil((n - heads) / 2);
+    const leftN = n - heads - rightN;
+
+    const sideW = W < 480 ? 66 : 82;
+    const tableW = W - sideW * 2;
+    const topPad = heads >= 1 ? 84 : 18;
+    const botPad = heads >= 2 ? 84 : 18;
+
+    const plates = [];
+    for (const g of state.guests) for (const d of g.dishes) plates.push({ g, d });
+    const pad = 16;
+    const innerW = tableW - pad * 2;
+    const cols = innerW >= 270 ? 3 : 2;
+    const cellW = innerW / cols;
+    const cellH = 114;
+    const plateRows = Math.ceil(plates.length / cols);
+
+    const tableH = Math.round(Math.max(
+      tableW * 1.5,
+      Math.max(leftN, rightN) * 88 + 30,
+      plateRows * cellH + pad * 2 + 12
+    ));
+    scene.style.height = topPad + tableH + botPad + "px";
+
+    const nodes = [];
+    const table = el("div", "tabletop");
+    Object.assign(table.style, { left: sideW + "px", top: topPad + "px", width: tableW + "px", height: tableH + "px" });
+
+    // Plates: a loose, staggered spread down the table.
+    const startY = Math.max(pad, (tableH - plateRows * cellH) / 2);
+    plates.forEach(({ g, d }, k) => {
+      const seed = g.id + "|" + k + "|" + d.name;
+      const c = k % cols, r = Math.floor(k / cols);
+      const stagger = (r % 2 ? 1 : -1) * cellW * 0.12;
+      let x = pad + cellW * (c + 0.5) + stagger + jit(seed + "x") * 5;
+      x = Math.max(pad + 40, Math.min(tableW - pad - 40, x));
+      const v = vesselFor(d, seed);
+      const y = startY + r * cellH + v.h / 2 + 6 + jit(seed + "y") * 9;
+      const b = el("button", "plate k-" + d.kind);
+      b.type = "button";
+      b.style.left = x + "px";
+      b.style.top = y + "px";
+      b.style.setProperty("--h", v.h + "px");
+      const vessel = el("span", "vessel v-" + v.type);
+      vessel.style.setProperty("--w", v.w + "px");
+      vessel.style.setProperty("--r", Math.round(jit(seed + "r") * (v.w === v.h ? 4 : 8)) + "deg");
+      if (v.type === "bottles") for (let i = 0; i < 3; i++) vessel.append(el("span"));
+      b.append(vessel, el("span", "plate-label", d.name));
+      b.setAttribute("aria-label", d.name + ", " + kindLabel(d.kind).toLowerCase() + ", from " + groupLabel(g));
+      b.addEventListener("click", () => (isMine(g) && canJoin() ? openForm(g) : openInfo(g)));
+      table.append(b);
+    });
+
+    if (!n) {
+      const msg = state.mode === "loading" ? "Setting the table…" : "No one is here yet. Tap I'm coming! below to take the first seat.";
+      table.append(el("p", "table-empty", msg));
+    } else if (!plates.length) {
+      table.append(el("p", "table-empty", "Plates appear here as people add dishes."));
+    }
+    nodes.push(table);
+
+    // Chairs: clockwise from the top, so a group sits together.
+    const slots = [];
+    if (heads >= 1) slots.push({ side: "top" });
+    for (let i = 0; i < rightN; i++) slots.push({ side: "right", i, of: rightN });
+    if (heads >= 2) slots.push({ side: "bottom" });
+    for (let i = leftN - 1; i >= 0; i--) slots.push({ side: "left", i, of: leftN });
+
+    slots.forEach((s, k) => {
+      const p = people[k];
+      const seed = p.g.id + "|" + p.i;
+      let x, y;
+      if (s.side === "top") { x = W / 2 + jit(seed + "x") * 14; y = topPad - 32; }
+      else if (s.side === "bottom") { x = W / 2 + jit(seed + "x") * 14; y = topPad + tableH + 32; }
+      else {
+        const along = (s.i + 0.5) / s.of;
+        y = topPad + tableH * along + jit(seed + "y") * 12;
+        x = (s.side === "left" ? sideW / 2 - 2 : W - sideW / 2 + 2) + jit(seed + "x") * 5;
+      }
+      const b = seatButton(p, s.side, isMine(p.g));
+      const gn = groupColor.get(p.g.id);
+      if (gn) { b.classList.add("grp"); b.style.setProperty("--grp", `var(--grp-${gn})`); }
+      b.style.left = x + "px";
+      b.style.top = y + "px";
+      b.querySelector(".chair").style.setProperty("--r", Math.round(jit(seed + "r") * 9) + "deg");
+      nodes.push(b);
+    });
+
+    scene.replaceChildren(...nodes);
+  }
+
+  let lastSceneW = 0;
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(() => {
+      const w = $("scene").clientWidth;
+      if (w && Math.abs(w - lastSceneW) > 1) renderTable();
+    }).observe($("scene"));
+  }
+
+  function renderMenu() {
+    const body = $("menuBody");
+    const groups = [];
+    for (const k of KINDS) {
+      const rows = [];
+      for (const g of state.guests) for (const d of g.dishes) if (d.kind === k.id) rows.push({ g, d });
+      if (!rows.length) continue;
+      const wrap = el("div", "menu-group k-" + k.id);
+      const h = el("h3"); h.append(el("span", "dot"), document.createTextNode(k.label));
+      const ul = el("ul");
+      for (const { g, d } of rows) {
+        const li = el("li");
+        const b = el("button"); b.type = "button";
+        b.append(el("span", "d", d.name), el("span", "p", groupLabel(g)));
+        b.addEventListener("click", () => (isMine(g) && canJoin() ? openForm(g) : openInfo(g)));
+        li.append(b); ul.append(li);
+      }
+      wrap.append(h, ul); groups.push(wrap);
+    }
+    const noDish = state.guests.filter(g => !g.dishes.length);
+    if (noDish.length) {
+      const wrap = el("div", "menu-group k-other");
+      const h = el("h3"); h.append(document.createTextNode("Coming, dish not picked yet"));
+      const ul = el("ul");
+      for (const g of noDish) {
+        const li = el("li"); const b = el("button"); b.type = "button";
+        b.append(el("span", "d", groupLabel(g)));
+        b.addEventListener("click", () => (isMine(g) && canJoin() ? openForm(g) : openInfo(g)));
+        li.append(b); ul.append(li);
+      }
+      wrap.append(h, ul); groups.push(wrap);
+    }
+    $("menu").hidden = !groups.length;
+    body.replaceChildren(...groups);
+    body.style.display = "grid"; body.style.gap = "16px";
+  }
+
+  function renderCta() {
+    const mine = state.guests.find(isMine);
+    const bar = $("ctaBar");
+    bar.hidden = !canJoin() || state.mode === "loading";
+    $("ctaBtn").textContent = mine ? "Edit my RSVP" : "I'm coming!";
+  }
+
+  // ---------- RSVP form ----------
+  let editing = null;
+
+  // Everyone in one RSVP: "Jordan & Riley", "Pat, Kim & Ola".
+  function groupLabel(g) {
+    const names = [isMine(g) ? "You" : g.name, ...g.others];
+    if (!g.others.length && g.party > 1) names.push(`${g.party - 1} more`);
+    return names.length < 3 ? names.join(" & ") : names.slice(0, -1).join(", ") + " & " + names[names.length - 1];
+  }
+
+  let personSeq = 0;
+  function addPersonRow(value) {
+    const rows = $("personRows");
+    if (rows.children.length >= MAX_PARTY - 1) return;
+    const row = el("div", "dish-line");
+    const input = el("input");
+    input.type = "text"; input.id = "f-person-" + personSeq++; input.maxLength = 40;
+    input.placeholder = "Their name";
+    input.autocomplete = "off";
+    input.setAttribute("enterkeyhint", "next");
+    input.value = value || "";
+    const x = el("button", "row-x", "×"); x.type = "button";
+    x.addEventListener("click", () => { row.remove(); relabelPeople(); });
+    row.append(input, x);
+    rows.append(row);
+    relabelPeople();
+    return input;
+  }
+  function relabelPeople() {
+    const rows = [...$("personRows").children];
+    rows.forEach((r, i) => {
+      r.querySelector("input").setAttribute("aria-label", "Person " + (i + 2) + " name");
+      r.querySelector(".row-x").setAttribute("aria-label", "Remove person " + (i + 2));
+    });
+    const btn = $("addPerson");
+    btn.hidden = rows.length >= MAX_PARTY - 1;
+    btn.textContent = rows.length ? "+ Add another person" : "+ Add a person";
+  }
+
+  let dishSeq = 0;
+  function addDishRow(d) {
+    const rows = $("dishRows");
+    if (rows.children.length >= MAX_DISHES) return;
+    const idx = dishSeq++;
+    const row = el("div", "dish-row");
+    row.dataset.kind = (d && d.kind) || "side";
+    const line = el("div", "dish-line");
+    const input = el("input");
+    input.type = "text"; input.id = "f-dish-" + idx; input.maxLength = 60;
+    input.placeholder = "e.g. Mac and cheese";
+    input.setAttribute("enterkeyhint", "done");
+    input.value = (d && d.name) || "";
+    const x = el("button", "row-x", "×"); x.type = "button";
+    x.addEventListener("click", () => {
+      if (rows.children.length > 1) row.remove();
+      else { input.value = ""; }
+      relabelRows();
+    });
+    line.append(input, x);
+    const kinds = el("div", "kinds"); kinds.setAttribute("role", "group");
+    for (const k of KINDS) {
+      const c = el("button", "kind-chip k-" + k.id); c.type = "button";
+      c.append(el("span", "dot"), document.createTextNode(k.label));
+      c.dataset.kind = k.id;
+      c.setAttribute("aria-pressed", String(row.dataset.kind === k.id));
+      c.addEventListener("click", () => {
+        row.dataset.kind = k.id;
+        kinds.querySelectorAll(".kind-chip").forEach(o => o.setAttribute("aria-pressed", String(o.dataset.kind === k.id)));
+      });
+      kinds.append(c);
+    }
+    row.append(line, kinds);
+    rows.append(row);
+    relabelRows();
+    return input;
+  }
+  function relabelRows() {
+    const rows = [...$("dishRows").children];
+    rows.forEach((r, i) => {
+      r.querySelector("input").setAttribute("aria-label", "Dish " + (i + 1));
+      r.querySelector(".row-x").setAttribute("aria-label", rows.length > 1 ? "Remove dish " + (i + 1) : "Clear dish");
+      r.querySelector(".kinds").setAttribute("aria-label", "Kind of dish " + (i + 1));
+    });
+    $("addDish").hidden = rows.length >= MAX_DISHES;
+  }
+
+  function openForm(g) {
+    editing = g;
+    const mine = g && isMine(g);
+    $("rsvpTitle").textContent = !g ? "Save your seat" : mine ? "Edit your RSVP" : `Edit ${firstName(g.name)}'s RSVP`;
+    $("saveBtn").textContent = g ? "Save changes" : "I'm coming!";
+    $("f-name").value = g ? g.name : "";
+    $("f-note").value = g ? g.note : "";
+    $("personRows").replaceChildren();
+    (g ? g.others : []).forEach(n => addPersonRow(n));
+    relabelPeople();
+    $("dishRows").replaceChildren();
+    if (g && g.dishes.length) g.dishes.forEach(d => addDishRow(d)); else addDishRow(null);
+    $("formErr").textContent = "";
+    disarmRemove();
+    $("removeBtn").hidden = !g;
+    $("removeBtn").textContent = mine || !g ? "Remove my RSVP" : "Remove this RSVP";
+    closeAll();
+    $("rsvpDlg").showModal();
+    if (!g) $("f-name").focus();
+  }
+
+  async function onSave(e) {
+    e.preventDefault();
+    const name = $("f-name").value.trim();
+    if (!name) {
+      $("formErr").textContent = "Add your name so people know who's sitting here.";
+      $("f-name").focus();
+      return;
+    }
+    const personInputs = [...$("personRows").querySelectorAll("input")];
+    const blank = personInputs.find(i => !i.value.trim());
+    if (blank) {
+      $("formErr").textContent = "Add a name for each person, or tap × to remove the empty row.";
+      blank.focus();
+      return;
+    }
+    const others = personInputs.map(i => i.value.trim().slice(0, 40));
+    const dishes = [...$("dishRows").children]
+      .map(r => ({ name: r.querySelector("input").value.trim().slice(0, 60), kind: r.dataset.kind }))
+      .filter(d => d.name);
+    const now = Date.now();
+    const data = {
+      name: name.slice(0, 40),
+      party: 1 + others.length,
+      others,
+      dishes,
+      note: $("f-note").value.trim().slice(0, 140),
+      createdAt: editing ? editing.createdAt || now : now,
+      updatedAt: now,
+    };
+    const by = editing ? editing.by : state.me;
+    if (by) data.by = by;
+    const btn = $("saveBtn");
+    const label = btn.textContent;
+    btn.disabled = true; btn.textContent = "Saving…";
+    try {
+      const wasNew = !editing;
+      const id = await store.save(editing && editing.id, data);
+      if (wasNew) markMine(id);
+      $("rsvpDlg").close();
+      render();
+      toast(wasNew ? `${firstName(data.name)} just slid into the table.` : "Changes saved.");
+    } catch (err) {
+      $("formErr").textContent = writeErrorMessage(err);
+    } finally {
+      btn.disabled = false; btn.textContent = label;
+    }
+  }
+
+  let armTimer;
+  function disarmRemove() {
+    clearTimeout(armTimer);
+    const b = $("removeBtn");
+    b.classList.remove("armed");
+    delete b.dataset.armed;
+  }
+  async function onRemove() {
+    const b = $("removeBtn");
+    if (!b.dataset.armed) {
+      b.dataset.armed = "1";
+      b.classList.add("armed");
+      b.textContent = "Tap again to remove";
+      armTimer = setTimeout(() => {
+        disarmRemove();
+        b.textContent = editing && !isMine(editing) ? "Remove this RSVP" : "Remove my RSVP";
+      }, 4000);
+      return;
+    }
+    disarmRemove();
+    try {
+      const id = editing.id;
+      await store.remove(id);
+      unmarkMine(id);
+      $("rsvpDlg").close();
+      render();
+      toast("RSVP removed.");
+    } catch (err) {
+      $("formErr").textContent = writeErrorMessage(err);
+    }
+  }
+
+  // ---------- details sheet ----------
+  let viewing = null;
+  function openInfo(g) {
+    viewing = g;
+    const mine = isMine(g);
+    const multi = state.guests.filter(x => x.party > 1);
+    const gk = multi.includes(g) ? (multi.indexOf(g) % 5) + 1 : (hash(g.id) % 5) + 1;
+    const color = mine ? "var(--accent)" : `var(--grp-${gk})`;
+    $("infoDlg").style.setProperty("--banner", color);
+    $("infoAvatars").replaceChildren(...[g.name, ...g.others].map(n => {
+      const a = el("span", "avatar", initials(n));
+      a.style.background = color;
+      if (mine) a.style.color = "var(--accent-ink)";
+      return a;
+    }));
+    $("infoName").textContent = groupLabel(g);
+    const ul = $("infoDishes");
+    if (g.dishes.length) {
+      ul.replaceChildren(...g.dishes.map(d => {
+        const li = el("li", "k-" + d.kind);
+        li.append(el("span", "dot"), document.createTextNode(d.name));
+        return li;
+      }));
+    } else {
+      ul.replaceChildren(el("li", "k-other", "No dish yet"));
+    }
+    $("infoNote").textContent = g.note;
+    $("infoNoteWrap").hidden = !g.note;
+    $("infoEdit").hidden = !canJoin() || !!g.demo;
+    closeAll();
+    $("infoDlg").showModal();
+  }
+
+  // ---------- wiring ----------
+  function closeAll() { document.querySelectorAll("dialog[open]").forEach(d => d.close()); }
+  document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => b.closest("dialog").close()));
+  document.querySelectorAll("dialog").forEach(d => d.addEventListener("click", e => { if (e.target === d) d.close(); }));
+  $("rsvpForm").addEventListener("submit", onSave);
+  $("removeBtn").addEventListener("click", onRemove);
+  $("addPerson").addEventListener("click", () => { const i = addPersonRow(""); if (i) i.focus(); });
+  $("addDish").addEventListener("click", () => { const i = addDishRow(null); if (i) i.focus(); });
+  $("infoEdit").addEventListener("click", () => viewing && openForm(viewing));
+  $("ctaBtn").addEventListener("click", () => openForm(state.guests.find(isMine) || null));
+  $("f-name").addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); const first = $("dishRows").querySelector("input"); if (first) first.focus(); }
+  });
+
+  // ---------- start ----------
+  async function start() {
+    render();
+    const hasViewer = !!(window.claude && typeof window.claude.use === "function");
+    if (!hasViewer) {
+      state.mode = "local";
+      store = localStore();
+      store.start();
+      return;
+    }
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if (user) {
+      const [id, owner, w] = await Promise.all([user.id(), user.isOwner(), user.can("data.write")]);
+      state.me = id;
+      state.isHost = owner;
+      if (w === false) state.canWrite = false;
+    }
+    if (!db) { state.mode = "signedout"; render(); return; }
+    store = sharedStore(db);
+    store.start();
+  }
+  start();
+})();
+</script>
