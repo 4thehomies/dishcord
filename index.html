@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dishcord</title>
@@ -364,7 +366,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
 </main>
 
 <div class="cta-bar" id="ctaBar">
-  <button type="button" class="primary" id="ctaBtn">I'm coming!</button>
+  <button type="button" class="primary" id="ctaBtn">I'm going!</button>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -397,7 +399,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     </div>
     <p class="form-err" id="formErr" role="alert"></p>
     <div class="sheet-actions">
-      <button type="submit" class="primary" id="saveBtn">I'm coming!</button>
+      <button type="submit" class="primary" id="saveBtn">I'm going!</button>
       <button type="button" class="danger-link" id="removeBtn" hidden>Remove this RSVP</button>
     </div>
   </form>
@@ -465,7 +467,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   function unmarkMine(id) {
     try { localStorage.setItem(MINE_KEY, JSON.stringify(readMine().filter(x => x !== id))); } catch {}
   }
-  const isMine = g => !g.demo && (readMine().includes(g.id) || (!!state.me && g.by === state.me));
+  const isMine = g => readMine().includes(g.id) || (!!state.me && g.by === state.me);
 
   // ---------- data cleaning (shared data is untrusted) ----------
   function clean(id, d) {
@@ -491,26 +493,51 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
       by: typeof d.by === "string" ? d.by : null,
     };
   }
-  // ---------- demo guests for testing (built into the page, never saved) ----------
-  // Set DEMO_MODE to false before you share the link with friends.
-  const DEMO_MODE = true;
-  const DEMO_DATA = [
-    { id: "demo-01", name: "Maya", others: [], dishes: [{ name: "Roast turkey", kind: "main" }] },
-    { id: "demo-02", name: "Jordan", others: ["Riley"], dishes: [{ name: "Green bean casserole", kind: "side" }, { name: "Apple cider", kind: "drinks" }] },
-    { id: "demo-03", name: "Priya", others: [], dishes: [{ name: "Pumpkin pie", kind: "dessert" }] },
-    { id: "demo-04", name: "Leo", others: [], dishes: [{ name: "Mac and cheese", kind: "side" }] },
-    { id: "demo-05", name: "Sam", others: ["Alex"], dishes: [{ name: "Cranberry sauce", kind: "side" }, { name: "Red wine", kind: "drinks" }] },
-    { id: "demo-06", name: "Ava", others: [], dishes: [{ name: "Dinner rolls", kind: "other" }] },
-    { id: "demo-07", name: "Marcus", others: [], dishes: [{ name: "Mashed potatoes", kind: "side" }, { name: "Brownies", kind: "dessert" }] },
-    { id: "demo-08", name: "Nina", others: [], dishes: [{ name: "Kale salad", kind: "side" }, { name: "Pecan pie", kind: "dessert" }] },
-  ];
-  const DEMO_GUESTS = DEMO_MODE
-    ? DEMO_DATA.map((d, i) => ({ ...clean(d.id, { ...d, note: "Demo guest", createdAt: i + 1 }), demo: true }))
-    : [];
-
   function setGuests(list) {
-    state.guests = [...DEMO_GUESTS, ...list].filter(Boolean).sort((a, b) => (a.createdAt - b.createdAt) || (a.id < b.id ? -1 : 1));
+    state.guests = list.filter(Boolean).sort((a, b) => (a.createdAt - b.createdAt) || (a.id < b.id ? -1 : 1));
   }
+  // ---------- Firebase (shared guest list when the page is on GitHub Pages) ----------
+  // Paste your Firebase web app settings here. While this is null, the page saves
+  // entries only in each visitor's own browser.
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAl•••••••••••••••••••••••••••••••",
+    authDomain: "dishcord-61918.firebaseapp.com",
+    projectId: "dishcord-61918",
+    storageBucket: "dishcord-61918.firebasestorage.app",
+    messagingSenderId: "168243268040",
+    appId: "1:168243268040:web:b222c1717fff94dd8f58fd",
+  };
+  const FIREBASE_SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
+
+  async function firebaseStore() {
+    const { initializeApp } = await import(FIREBASE_SDK + "firebase-app.js");
+    const fs = await import(FIREBASE_SDK + "firebase-firestore.js");
+    const app = initializeApp(FIREBASE_CONFIG);
+    const col = fs.collection(fs.getFirestore(app), "guests");
+    return {
+      start() {
+        const timer = setTimeout(() => { state.slow = true; render(); }, 10000);
+        fs.onSnapshot(col, snap => {
+          setGuests(snap.docs.map(d => clean(d.id, d.data())));
+          if (!snap.metadata.fromCache) { clearTimeout(timer); state.slow = false; }
+          if (state.mode === "loading") state.mode = "shared";
+          render();
+        }, () => {
+          clearTimeout(timer);
+          state.slow = false;
+          state.loadError = "error";
+          render();
+        });
+      },
+      async save(id, data) {
+        const ref = id ? fs.doc(col, id) : fs.doc(col);
+        await fs.setDoc(ref, data);
+        return ref.id;
+      },
+      async remove(id) { await fs.deleteDoc(fs.doc(col, id)); },
+    };
+  }
+
   // ---------- storage: shared (db) or this-browser-only (local) ----------
   let store = null;
 
@@ -580,6 +607,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
       return "Your link lets you see the table but not change it. Ask the host to add you as an editor.";
     }
     if (code === "quota_exceeded") return "The guest list is full. Ask the host to remove old entries.";
+    if (code === "permission-denied") return "The guest list didn't accept this entry. Check the names and dishes, then try again.";
     return "That didn't save. Check your connection and try again.";
   }
 
@@ -765,7 +793,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     });
 
     if (!n) {
-      const msg = state.mode === "loading" ? "Setting the table…" : "No one is here yet. Tap I'm coming! below to take the first seat.";
+      const msg = state.mode === "loading" ? "Setting the table…" : "No one is here yet. Tap I'm going! below to take the first seat.";
       table.append(el("p", "table-empty", msg));
     } else if (!plates.length) {
       table.append(el("p", "table-empty", "Plates appear here as people add dishes."));
@@ -851,7 +879,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     const mine = state.guests.find(isMine);
     const bar = $("ctaBar");
     bar.hidden = !canJoin() || state.mode === "loading";
-    $("ctaBtn").textContent = mine ? "Edit my RSVP" : "I'm coming!";
+    $("ctaBtn").textContent = mine ? "Edit my RSVP" : "I'm going!";
   }
 
   // ---------- RSVP form ----------
@@ -944,7 +972,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     editing = g;
     const mine = g && isMine(g);
     $("rsvpTitle").textContent = !g ? "Save your seat" : mine ? "Edit your RSVP" : `Edit ${firstName(g.name)}'s RSVP`;
-    $("saveBtn").textContent = g ? "Save changes" : "I'm coming!";
+    $("saveBtn").textContent = g ? "Save changes" : "I'm going!";
     $("f-name").value = g ? g.name : "";
     $("f-note").value = g ? g.note : "";
     $("personRows").replaceChildren();
@@ -1069,7 +1097,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     }
     $("infoNote").textContent = g.note;
     $("infoNoteWrap").hidden = !g.note;
-    $("infoEdit").hidden = !canJoin() || !!g.demo;
+    $("infoEdit").hidden = !canJoin();
     closeAll();
     $("infoDlg").showModal();
   }
@@ -1092,6 +1120,16 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   async function start() {
     render();
     const hasViewer = !!(window.claude && typeof window.claude.use === "function");
+    if (!hasViewer && FIREBASE_CONFIG) {
+      try {
+        store = await firebaseStore();
+        store.start();
+      } catch {
+        state.loadError = "error";
+        render();
+      }
+      return;
+    }
     if (!hasViewer) {
       state.mode = "local";
       store = localStore();
