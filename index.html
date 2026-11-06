@@ -351,7 +351,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   <header class="head-block">
     <h1 id="evTitle"><span class="hash" aria-hidden="true">#</span>Dishcord</h1>
     <p class="event-name">Friendsgiving at Sharon &amp; Trenton's House</p>
-    <p class="meta">Sunday, November 22, 2026 · 1:00 pm</p>
+    <p class="meta">Sunday, November 22, 2026 · 2:00 pm</p>
     <p class="notice" id="notice" hidden></p>
   </header>
 
@@ -784,10 +784,26 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     state.guests.filter(g => g.party > 1).forEach((g, k) => groupColor.set(g.id, (k % 5) + 1));
     const n = people.length;
 
-    // How the chairs split: heads of the table fill in as the party grows.
-    const heads = n >= 6 ? 2 : (n >= 3 && n % 2 === 1 ? 1 : 0);
-    const rightN = Math.ceil((n - heads) / 2);
-    const leftN = n - heads - rightN;
+    // How the chairs split. Each RSVP is a unit that stays together on one side.
+    // Heads of the table fill in as the party grows, but only with solo guests.
+    const solos = state.guests.filter(g => g.party === 1);
+    const groups = state.guests.filter(g => g.party > 1);
+    const heads = Math.min(solos.length, n >= 6 ? 2 : (n >= 3 && n % 2 === 1 ? 1 : 0));
+    const headGuests = solos.slice(0, heads);
+    const sides = { right: [], left: [] };
+    const count = s => sides[s].reduce((t, g) => t + g.party, 0);
+    // Biggest groups first, then solos fill in to even out the two sides.
+    const bySize = [...groups].sort((a, b) => b.party - a.party);
+    for (const g of [...bySize, ...solos.slice(heads)]) {
+      sides[count("left") < count("right") ? "left" : "right"].push(g);
+    }
+    // Keep each side in RSVP order, so seats do not jump around when someone joins.
+    for (const s of ["right", "left"]) sides[s].sort((a, b) => state.guests.indexOf(a) - state.guests.indexOf(b));
+    const rightN = count("right");
+    const leftN = count("left");
+    // Each side needs room for its chairs plus a gap around each RSVP.
+    const sideLen = s => count(s) * 80 + 30 * (sides[s].length + 1);
+    const longSide = Math.max(sideLen("right"), sideLen("left"));
 
     const sideW = W < 480 ? 66 : 82;
     const tableW = W - sideW * 2;
@@ -805,7 +821,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
 
     const tableH = Math.round(Math.max(
       tableW * 1.5,
-      Math.max(leftN, rightN) * 88 + 30,
+      longSide,
       plateRows * cellH + pad * 2 + 12
     ));
     scene.style.height = topPad + tableH + botPad + "px";
@@ -847,22 +863,32 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     }
     nodes.push(table);
 
-    // Chairs: clockwise from the top, so a group sits together.
+    // Chairs: everyone in one RSVP sits side by side.
     const slots = [];
-    if (heads >= 1) slots.push({ side: "top" });
-    for (let i = 0; i < rightN; i++) slots.push({ side: "right", i, of: rightN });
-    if (heads >= 2) slots.push({ side: "bottom" });
-    for (let i = leftN - 1; i >= 0; i--) slots.push({ side: "left", i, of: leftN });
+    if (heads >= 1) slots.push({ side: "top", p: { g: headGuests[0], i: 0 } });
+    if (heads >= 2) slots.push({ side: "bottom", p: { g: headGuests[1], i: 0 } });
+    // Group members sit a fixed, close distance apart. The spare length of the
+    // table goes into the spaces between RSVPs and at the two ends.
+    const PITCH = 80;
+    for (const side of ["right", "left"]) {
+      const units = sides[side];
+      const spare = Math.max(0, tableH - count(side) * PITCH) / (units.length + 1);
+      let y = 0;
+      units.forEach(g => {
+        y += spare;
+        for (let i = 0; i < g.party; i++, y += PITCH) slots.push({ side, p: { g, i }, y: y + PITCH / 2, solo: g.party === 1 });
+      });
+    }
 
-    slots.forEach((s, k) => {
-      const p = people[k];
+    slots.forEach(s => {
+      const p = s.p;
       const seed = p.g.id + "|" + p.i;
       let x, y;
       if (s.side === "top") { x = W / 2 + jit(seed + "x") * 14; y = topPad - 32; }
       else if (s.side === "bottom") { x = W / 2 + jit(seed + "x") * 14; y = topPad + tableH + 32; }
       else {
-        const along = (s.i + 0.5) / s.of;
-        y = topPad + tableH * along + jit(seed + "y") * 12;
+        // Group members get less jitter, so they line up as one cluster.
+        y = topPad + s.y + jit(seed + "y") * (s.solo ? 12 : 4);
         x = (s.side === "left" ? sideW / 2 - 2 : W - sideW / 2 + 2) + jit(seed + "x") * 5;
       }
       const b = seatButton(p, s.side, isMine(p.g));
