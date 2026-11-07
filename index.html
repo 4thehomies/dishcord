@@ -3,6 +3,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dishcord</title>
+<meta name="description" content="Friendsgiving at Sharon &amp; Trenton's House. Sunday, Nov 22 at 1:00 pm. Grab a seat and say what you're bringing.">
+<!-- Link preview (iMessage, WhatsApp, Slack). Upload preview.png next to this file. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dishcord">
+<meta property="og:title" content="#Dishcord · Friendsgiving at Sharon &amp; Trenton's">
+<meta property="og:description" content="Sunday, Nov 22 · 1:00 pm. Grab a seat and say what you're bringing.">
+<meta property="og:image" content="preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dishcord: Friendsgiving at Sharon and Trenton's House, Sunday, November 22, 1:00 pm">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235865F2'/%3E%3Ccircle cx='32' cy='18.5' r='4' fill='%23fff'/%3E%3Cpath d='M11 44a21 21 0 0 1 42 0z' fill='%23fff'/%3E%3Crect x='7' y='45' width='50' height='6' rx='3' fill='%23fff'/%3E%3Cellipse cx='25' cy='35' rx='3.2' ry='4.2' fill='%235865F2'/%3E%3Cellipse cx='39' cy='35' rx='3.2' ry='4.2' fill='%235865F2'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#F2EBE2">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,6 +96,8 @@ button { font: inherit; color: inherit; }
 .head-block { display: grid; gap: 6px; }
 .event-name { margin: 4px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; line-height: 1.2; text-wrap: balance; }
 .hash { color: var(--blurple); font-weight: 800; margin-right: 3px; }
+#evTitle { display: flex; align-items: center; gap: 12px; }
+.logo { width: 1.05em; height: 1.05em; flex: none; border-radius: 0.25em; box-shadow: 0 2px 6px var(--shadow); }
 h1 {
   font-family: var(--font-display);
   font-weight: 800;
@@ -93,6 +109,13 @@ h1 {
 }
 .meta { margin: 0; color: var(--muted); font-weight: 700; }
 .meta:empty { display: none; }
+.where {
+  justify-self: start; display: inline-flex; align-items: center; gap: 6px;
+  color: var(--muted); font-weight: 700; text-decoration: underline;
+  text-decoration-color: var(--line); text-underline-offset: 3px; padding: 2px 0;
+}
+.where svg { width: 16px; height: 16px; flex: none; color: var(--accent); }
+.where:active { color: var(--ink); }
 .link-btn {
   background: none; border: 0; padding: 4px 0; color: var(--accent);
   font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; justify-self: start;
@@ -349,9 +372,13 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
 
 <main>
   <header class="head-block">
-    <h1 id="evTitle"><span class="hash" aria-hidden="true">#</span>Dishcord</h1>
+    <h1 id="evTitle"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#5865F2"/><circle cx="32" cy="18.5" r="4" fill="#fff"/><path d="M11 44a21 21 0 0 1 42 0z" fill="#fff"/><rect x="7" y="45" width="50" height="6" rx="3" fill="#fff"/><ellipse cx="25" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/><ellipse cx="39" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/></svg><span><span class="hash" aria-hidden="true">#</span>Dishcord</span></h1>
     <p class="event-name">Friendsgiving at Sharon &amp; Trenton's House</p>
-    <p class="meta">Sunday, November 22, 2026 · 2:00 pm</p>
+    <p class="meta">Sunday, November 22, 2026 · 1:00 pm</p>
+    <a class="where" id="whereLink" href="https://www.google.com/maps/search/?api=1&amp;query=657%20Birch%20Ave%2C%20San%20Mateo%2C%20CA%2094402" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      657 Birch Ave, San Mateo
+    </a>
     <p class="notice" id="notice" hidden></p>
   </header>
 
@@ -1190,6 +1217,11 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   });
 
   // ---------- start ----------
+  // iPhones, iPads and Macs open the address in Apple Maps. Everyone else gets Google Maps.
+  if (/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) {
+    $("whereLink").href = "https://maps.apple.com/?q=657%20Birch%20Ave%2C%20San%20Mateo%2C%20CA%2094402";
+  }
+
   async function start() {
     render();
     const hasViewer = !!(window.claude && typeof window.claude.use === "function");
