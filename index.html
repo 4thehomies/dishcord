@@ -3,16 +3,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dishcord</title>
-<meta name="description" content="Friendsgiving at Sharon &amp; Trenton's House. Sunday, Nov 22 at 1:00 pm. Grab a seat and say what you're bringing.">
+<meta name="description" content="You're invited. Grab a seat at the table and say what you're bringing.">
 <!-- Link preview (iMessage, WhatsApp, Slack). Upload preview.png next to this file. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Dishcord">
-<meta property="og:title" content="#Dishcord · Friendsgiving at Sharon &amp; Trenton's">
-<meta property="og:description" content="Sunday, Nov 22 · 1:00 pm. Grab a seat and say what you're bringing.">
+<meta property="og:title" content="#Dishcord · You're invited">
+<meta property="og:description" content="Tap to see the table, grab a seat and say what you're bringing.">
 <meta property="og:image" content="preview.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Dishcord: Friendsgiving at Sharon and Trenton's House, Sunday, November 22, 1:00 pm">
+<meta property="og:image:alt" content="Dishcord: a table seen from above, with chairs and dishes">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235865F2'/%3E%3Ccircle cx='32' cy='18.5' r='4' fill='%23fff'/%3E%3Cpath d='M11 44a21 21 0 0 1 42 0z' fill='%23fff'/%3E%3Crect x='7' y='45' width='50' height='6' rx='3' fill='%23fff'/%3E%3Cellipse cx='25' cy='35' rx='3.2' ry='4.2' fill='%235865F2'/%3E%3Cellipse cx='39' cy='35' rx='3.2' ry='4.2' fill='%235865F2'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="icon.png">
@@ -43,6 +43,7 @@
   --online: #2F9E55;
   --shadow: rgb(60 35 15 / 0.22);
   --scrim: rgb(25 15 8 / 0.5);
+  --c-appetizer: #2F6F6A;
   --c-main: #9C2F2F;
   --c-side: #6B7B34;
   --c-dessert: #D27A26;
@@ -60,7 +61,7 @@
     --grp-1: #7A4E2E; --grp-2: #55602F; --grp-3: #6E3B36; --grp-4: #6B5A2A; --grp-5: #5A4258;
     --blurple: #8C96F8; --online: #43B581;
     --shadow: rgb(0 0 0 / 0.5); --scrim: rgb(0 0 0 / 0.6);
-    --c-main: #B83A3A; --c-side: #7E8F3E; --c-dessert: #E0883A; --c-drinks: #8A5279; --c-other: #9C8A76;
+    --c-appetizer: #4E9A93; --c-main: #B83A3A; --c-side: #7E8F3E; --c-dessert: #E0883A; --c-drinks: #8A5279; --c-other: #9C8A76;
     color-scheme: dark;
   }
 }
@@ -72,7 +73,7 @@
     --grp-1: #7A4E2E; --grp-2: #55602F; --grp-3: #6E3B36; --grp-4: #6B5A2A; --grp-5: #5A4258;
   --blurple: #8C96F8; --online: #43B581;
   --shadow: rgb(0 0 0 / 0.5); --scrim: rgb(0 0 0 / 0.6);
-  --c-main: #B83A3A; --c-side: #7E8F3E; --c-dessert: #E0883A; --c-drinks: #8A5279; --c-other: #9C8A76;
+  --c-appetizer: #4E9A93; --c-main: #B83A3A; --c-side: #7E8F3E; --c-dessert: #E0883A; --c-drinks: #8A5279; --c-other: #9C8A76;
   color-scheme: dark;
 }
 
@@ -220,6 +221,7 @@ h1 {
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   overflow-wrap: anywhere;
 }
+.k-appetizer { --cat: var(--c-appetizer); }
 .k-main { --cat: var(--c-main); }
 .k-side { --cat: var(--c-side); }
 .k-dessert { --cat: var(--c-dessert); }
@@ -290,12 +292,13 @@ dialog.sheet::backdrop { background: var(--scrim); }
 .field { display: grid; gap: 6px; }
 .field > label, .lbl, legend { font-weight: 700; font-size: 15px; }
 .opt { font-weight: 400; color: var(--muted); }
-input[type="text"] {
-  width: 100%; min-height: 48px; padding: 10px 12px;
+input[type="text"], input[type="date"], input[type="time"] {
+  width: 100%; display: block; -webkit-appearance: none; appearance: none; text-align: left; min-height: 48px; padding: 10px 12px;
   font: inherit; font-size: 16px; color: var(--ink);
   background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px;
 }
-input[type="text"]:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+input[type="date"]::-webkit-date-and-time-value, input[type="time"]::-webkit-date-and-time-value { text-align: left; }
+input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
 fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; min-width: 0; }
 legend { padding: 0; margin-bottom: 6px; }
 
@@ -367,32 +370,163 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   box-shadow: 0 6px 18px var(--shadow);
 }
 
+
+/* Views */
+.view { display: grid; gap: 22px; }
+.home-link { display: inline-flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; }
+.back-link {
+  justify-self: start; display: inline-flex; align-items: center; gap: 4px;
+  font-size: 14px; font-weight: 700; color: var(--muted); text-decoration: none;
+  padding: 6px 0; margin: -6px 0 2px;
+}
+.back-link:active { color: var(--ink); }
+.hosted-by { margin: 0; font-weight: 700; }
+.event-note { margin: 2px 0 0; color: var(--muted); overflow-wrap: anywhere; }
+
+/* Host tools on the event page */
+.host-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 8px; padding: 8px 8px 8px 12px; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+}
+.host-tag {
+  margin-right: auto; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+}
+.host-tag svg { width: 16px; height: 16px; color: #E0A82E; }
+.pill-btn {
+  min-height: 40px; padding: 6px 14px; border-radius: 999px;
+  border: 1.5px solid var(--line); background: var(--bg); color: var(--ink);
+  font-weight: 700; font-size: 15px; cursor: pointer;
+}
+.pill-btn.accent { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+/* My events */
+.home-section { display: grid; gap: 10px; }
+.home-list { display: grid; gap: 10px; }
+.ev-card {
+  display: flex; align-items: stretch; overflow: hidden;
+  border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+.ev-swatch { width: 8px; flex: none; }
+.ev-card a {
+  flex: 1; min-width: 0; display: grid; gap: 2px;
+  padding: 12px 6px 12px 14px; color: inherit; text-decoration: none;
+}
+.ev-title { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; line-height: 1.2; overflow-wrap: anywhere; }
+.ev-when, .ev-count { font-size: 14px; color: var(--muted); }
+.ev-card.past, .ev-card.gone { opacity: 0.65; }
+.ev-x { flex: none; width: 48px; border: 0; background: none; color: var(--muted); font-size: 22px; cursor: pointer; }
+.empty-note { margin: 0; color: var(--muted); }
+.device-note { margin: 0; font-size: 13px; color: var(--muted); }
+
+/* Event form */
+.field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.themes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.theme-opt {
+  display: grid; gap: 6px; padding: 7px; border-radius: 12px;
+  border: 2px solid var(--line); background: var(--sw-bg); color: var(--sw-ink);
+  font-size: 13px; font-weight: 700; text-align: left; cursor: pointer;
+}
+.theme-opt[aria-checked="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+.theme-mini { position: relative; display: block; height: 50px; }
+.theme-mini .t {
+  position: absolute; left: 26%; right: 26%; top: 3px; bottom: 3px; border-radius: 6px;
+  background: var(--sw-wood); box-shadow: inset 0 0 0 2px var(--sw-edge);
+}
+.theme-mini .c {
+  position: absolute; width: 11px; height: 11px; border-radius: 3px;
+  background: var(--sw-chair); border: 1.5px solid var(--sw-chairedge);
+}
+.theme-mini .c1 { left: 6%; top: 8px; }
+.theme-mini .c2 { left: 6%; bottom: 8px; background: var(--sw-chair2); }
+.theme-mini .c3 { right: 6%; top: 8px; background: var(--sw-chair2); }
+.theme-mini .c4 { right: 6%; bottom: 8px; }
+.theme-mini .pl {
+  position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px;
+  border-radius: 50%; background: var(--sw-accent); box-shadow: 0 0 0 2px var(--sw-bg);
+}
+.theme-name { padding-left: 2px; }
+
+/* Invite sheet */
+.copy-row { display: flex; gap: 8px; }
+.copy-row input { flex: 1; min-width: 0; font-size: 15px; color: var(--muted); }
+.copy-btn {
+  flex: none; min-width: 84px; border: 0; border-radius: 12px;
+  background: var(--accent); color: var(--accent-ink);
+  font-family: var(--font-display); font-weight: 800; font-size: 1rem; cursor: pointer;
+}
+.copy-btn.quiet { background: var(--surface); color: var(--ink); border: 1.5px solid var(--line); }
+#shareBtn { max-width: none; box-shadow: none; }
+.host-link { display: grid; gap: 8px; padding: 12px; border-radius: 12px; background: var(--bg); border: 1px dashed var(--line); }
+
 @media (prefers-reduced-motion: reduce) { .chair, .vessel { transition: none; } }
 </style>
+<style id="themeVars"></style>
 
 <main>
-  <header class="head-block">
-    <h1 id="evTitle"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#5865F2"/><circle cx="32" cy="18.5" r="4" fill="#fff"/><path d="M11 44a21 21 0 0 1 42 0z" fill="#fff"/><rect x="7" y="45" width="50" height="6" rx="3" fill="#fff"/><ellipse cx="25" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/><ellipse cx="39" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/></svg><span><span class="hash" aria-hidden="true">#</span>Dishcord</span></h1>
-    <p class="event-name">Friendsgiving at Sharon &amp; Trenton's House</p>
-    <p class="meta">Sunday, November 22, 2026 · 1:00 pm</p>
-    <a class="where" id="whereLink" href="https://www.google.com/maps/search/?api=1&amp;query=657%20Birch%20Ave%2C%20San%20Mateo%2C%20CA%2094402" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
-      657 Birch Ave, San Mateo
-    </a>
-    <p class="notice" id="notice" hidden></p>
-  </header>
+  <!-- Event page -->
+  <div id="eventView" class="view" hidden>
+    <header class="head-block">
+      <a class="back-link" id="backLink" href="?home">‹ My events</a>
+      <h1><a class="home-link" href="?home" aria-label="Dishcord, go to My events"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#5865F2"/><circle cx="32" cy="18.5" r="4" fill="#fff"/><path d="M11 44a21 21 0 0 1 42 0z" fill="#fff"/><rect x="7" y="45" width="50" height="6" rx="3" fill="#fff"/><ellipse cx="25" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/><ellipse cx="39" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/></svg><span><span class="hash" aria-hidden="true">#</span>Dishcord</span></a></h1>
+      <p class="event-name" id="evName"></p>
+      <p class="hosted-by" id="evHosts" hidden></p>
+      <p class="meta" id="evWhen"></p>
+      <a class="where" id="whereLink" target="_blank" rel="noopener" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span id="whereText"></span>
+      </a>
+      <p class="event-note" id="evNote" hidden></p>
+      <div class="host-bar" id="hostBar" hidden>
+        <span class="host-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 18h18l-1.6-9.5-4.9 3.9L12 5l-2.5 7.4-4.9-3.9z"/></svg>Hosting</span>
+        <button type="button" class="pill-btn" id="editEventBtn">Edit event</button>
+        <button type="button" class="pill-btn accent" id="inviteBtn">Invite</button>
+      </div>
+      <p class="notice" id="notice" hidden></p>
+    </header>
 
-  <section aria-label="The table, seen from above">
-    <div class="scene" id="scene"></div>
-  </section>
+    <section aria-label="The table, seen from above">
+      <div class="scene" id="scene"></div>
+    </section>
 
-  <section class="menu" id="menu" aria-labelledby="menuTitle">
-    <h2 id="menuTitle"><span class="hash" aria-hidden="true">#</span>whos-bringing-what</h2>
-    <div id="menuBody"></div>
-  </section>
+    <section class="menu" id="menu" aria-labelledby="menuTitle">
+      <h2 id="menuTitle"><span class="hash" aria-hidden="true">#</span>whos-bringing-what</h2>
+      <div id="menuBody"></div>
+    </section>
+  </div>
+
+  <!-- My events -->
+  <div id="homeView" class="view" hidden>
+    <header class="head-block">
+      <h1><span class="home-link"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#5865F2"/><circle cx="32" cy="18.5" r="4" fill="#fff"/><path d="M11 44a21 21 0 0 1 42 0z" fill="#fff"/><rect x="7" y="45" width="50" height="6" rx="3" fill="#fff"/><ellipse cx="25" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/><ellipse cx="39" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/></svg><span><span class="hash" aria-hidden="true">#</span>Dishcord</span></span></h1>
+      <p class="event-name">My events</p>
+    </header>
+    <section class="home-section" id="hostingSection" aria-labelledby="hostingTitle">
+      <h2 class="section-title" id="hostingTitle"><span class="hash" aria-hidden="true">#</span>hosting</h2>
+      <div class="home-list" id="hostingList"></div>
+    </section>
+    <section class="home-section" id="invitedSection" aria-labelledby="invitedTitle">
+      <h2 class="section-title" id="invitedTitle"><span class="hash" aria-hidden="true">#</span>invited</h2>
+      <div class="home-list" id="invitedList"></div>
+    </section>
+    <p class="empty-note" id="homeEmpty" hidden>No events yet. Tap <strong>Create event</strong> to start one. Events you open from an invite link also show here.</p>
+    <p class="device-note">This list is saved on this device only.</p>
+  </div>
+
+  <!-- Event not found -->
+  <div id="missingView" class="view" hidden>
+    <header class="head-block">
+      <h1><a class="home-link" href="?home"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#5865F2"/><circle cx="32" cy="18.5" r="4" fill="#fff"/><path d="M11 44a21 21 0 0 1 42 0z" fill="#fff"/><rect x="7" y="45" width="50" height="6" rx="3" fill="#fff"/><ellipse cx="25" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/><ellipse cx="39" cy="35" rx="3.2" ry="4.2" fill="#5865F2"/></svg><span><span class="hash" aria-hidden="true">#</span>Dishcord</span></a></h1>
+      <p class="event-name" id="missingTitle">We can't find this event</p>
+      <p class="event-note" id="missingText">The host may have deleted it, or the link is not complete. Ask the host to send the link again.</p>
+      <a class="link-btn" href="?home">Go to My events</a>
+    </header>
+  </div>
 </main>
 
-<div class="cta-bar" id="ctaBar">
+<div class="cta-bar" id="ctaBar" hidden>
   <button type="button" class="primary" id="ctaBtn">I'm coming!</button>
 </div>
 
@@ -450,15 +584,122 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
         <p class="profile-note" id="infoNote"></p>
       </div>
     </div>
+    <p class="form-err" id="infoErr" role="alert"></p>
     <div class="sheet-actions">
       <button type="button" class="primary" id="infoEdit">Edit this RSVP</button>
+      <button type="button" class="danger-link" id="infoRemove" hidden>Remove from the table</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Create or edit an event -->
+<dialog class="sheet" id="eventDlg" aria-labelledby="eventDlgTitle">
+  <form class="sheet-inner" id="eventForm" novalidate>
+    <div class="sheet-head">
+      <h2 id="eventDlgTitle">Create event</h2>
+      <button type="button" class="close-btn" data-close aria-label="Close">×</button>
+    </div>
+    <div class="field">
+      <label for="e-title">Event name</label>
+      <input type="text" id="e-title" maxlength="60" enterkeyhint="next" placeholder="e.g. Friendsgiving">
+    </div>
+    <div class="field">
+      <label for="e-hosts">Hosted by <span class="opt">(optional)</span></label>
+      <input type="text" id="e-hosts" maxlength="60" enterkeyhint="next" placeholder="e.g. Sharon & Trenton">
+    </div>
+    <div class="field-pair">
+      <div class="field">
+        <label for="e-date">Date</label>
+        <input type="date" id="e-date">
+      </div>
+      <div class="field">
+        <label for="e-time">Start time <span class="opt">(optional)</span></label>
+        <input type="time" id="e-time">
+      </div>
+    </div>
+    <div class="field">
+      <label for="e-address">Address <span class="opt">(optional)</span></label>
+      <input type="text" id="e-address" maxlength="120" autocomplete="street-address" enterkeyhint="next" placeholder="Street, city">
+    </div>
+    <div class="field">
+      <label for="e-note">Note for guests <span class="opt">(optional)</span></label>
+      <input type="text" id="e-note" maxlength="200" enterkeyhint="done" placeholder="e.g. Bring a chair if you can">
+    </div>
+    <fieldset>
+      <legend>Theme</legend>
+      <div class="themes" id="themePicker" role="radiogroup" aria-label="Theme"></div>
+    </fieldset>
+    <p class="form-err" id="eventErr" role="alert"></p>
+    <div class="sheet-actions">
+      <button type="submit" class="primary" id="eventSaveBtn">Create event</button>
+      <button type="button" class="danger-link" id="deleteEventBtn" hidden>Delete this event</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Invite guests -->
+<dialog class="sheet" id="shareDlg" aria-labelledby="shareTitle">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h2 id="shareTitle">Invite your guests</h2>
+      <button type="button" class="close-btn" data-close aria-label="Close">×</button>
+    </div>
+    <p class="field-help" style="margin:0">Send this link to your guests. Anyone with the link can see the table and RSVP.</p>
+    <div class="copy-row">
+      <input type="text" id="shareLink" readonly aria-label="Event link">
+      <button type="button" class="copy-btn" id="copyLinkBtn">Copy</button>
+    </div>
+    <button type="button" class="primary" id="shareBtn" hidden>Share…</button>
+    <div class="host-link" id="hostLinkWrap" hidden>
+      <p class="profile-label" style="margin:0">Your private host link</p>
+      <p class="field-help" style="margin:0">Keep this link private. Open it on another phone to edit this event there, or send it to a co-host. Save it in Notes in case this phone forgets you.</p>
+      <div class="copy-row">
+        <input type="text" id="hostLink" readonly aria-label="Private host link">
+        <button type="button" class="copy-btn quiet" id="copyHostBtn">Copy</button>
+      </div>
     </div>
   </div>
 </dialog>
 
 <script>
 (() => {
+  // ---------- settings ----------
+  // Your Firebase web app settings. These are public by design: the security
+  // rules in firestore.rules decide what anyone can read or change.
+  // Set this to null to test the page with data saved only in this browser.
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAlYJMqkYgrdURSVch_hyJ8qLO0CGc6nE0",
+    authDomain: "dishcord-61918.firebaseapp.com",
+    projectId: "dishcord-61918",
+    storageBucket: "dishcord-61918.firebasestorage.app",
+    messagingSenderId: "168243268040",
+    appId: "1:168243268040:web:b222c1717fff94dd8f58fd",
+  };
+  const FIREBASE_SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
+
+  // The plain site address opens My events. The first Friendsgiving invite went
+  // out as the plain address, so until the party is over, the plain address also
+  // adds Friendsgiving to the visitor's list (once, so the × button still works).
+  // After the party, you can set this to null.
+  const PLAIN_LINK_ADDS = { id: "friendsgiving", until: "2026-11-22" };
+
+  // Friendsgiving keeps its original guest list. These details show until the
+  // event record exists in the database.
+  const LEGACY_ID = "friendsgiving";
+  const LEGACY_EVENT = {
+    title: "Friendsgiving at Sharon & Trenton's House",
+    hosts: "",
+    date: "2026-11-22",
+    time: "14:00",
+    address: "657 Birch Ave, San Mateo, CA 94402",
+    note: "",
+    theme: "harvest",
+    owners: [],
+    createdAt: 0,
+  };
+
   const KINDS = [
+    { id: "appetizer", label: "Appetizer" },
     { id: "main", label: "Main" },
     { id: "side", label: "Side" },
     { id: "dessert", label: "Dessert" },
@@ -466,35 +707,159 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     { id: "other", label: "Other" },
   ];
   const KIND_IDS = KINDS.map(k => k.id);
-  const kindLabel = id => (KINDS.find(k => k.id === id) || KINDS[4]).label;
+  const kindLabel = id => (KINDS.find(k => k.id === id) || KINDS.find(k => k.id === "other")).label;
   const MAX_PARTY = 8;
   const MAX_DISHES = 5;
   const $ = id => document.getElementById(id);
 
+  // ---------- themes ----------
+  // Each theme changes the page, the buttons, the table wood and the chairs.
+  // The Dishcord icon, the # marks, the online dots and the food colors stay the same.
+  const P = (bg, surface, ink, muted, line, accent, accentInk, wood, woodEdge, plate, plateEdge, chairTaken, chairEdge, grps) => ({
+    "bg": bg, "surface": surface, "ink": ink, "muted": muted, "line": line,
+    "accent": accent, "accent-ink": accentInk, "wood": wood, "wood-edge": woodEdge,
+    "plate": plate, "plate-edge": plateEdge, "chair-taken": chairTaken, "chair-edge": chairEdge,
+    "grp-1": grps[0], "grp-2": grps[1], "grp-3": grps[2], "grp-4": grps[3], "grp-5": grps[4],
+  });
+  const THEMES = [
+    { id: "harvest", label: "Harvest",
+      light: P("#F2EBE2", "#FFFAF4", "#2B211B", "#6E5F53", "#DCCFC0", "#B4501B", "#FFFFFF", "#A26C44", "#7A4A2A", "#FFFDF9", "#E2D6C8", "#F1DCC5", "#86573A", ["#F2C7A0", "#CFDBA9", "#E8BDB6", "#E6D49A", "#D6C2D6"]),
+      dark:  P("#1B1612", "#27201A", "#F1E8DE", "#B3A393", "#41362D", "#E8834A", "#1E1006", "#5B3B25", "#3E2817", "#ECE4D9", "#C9BBAB", "#4A3A2C", "#C08A5E", ["#7A4E2E", "#55602F", "#6E3B36", "#6B5A2A", "#5A4258"]) },
+    { id: "winter", label: "Winter",
+      light: P("#EEF2F0", "#FAFCFB", "#1D2A26", "#5A6A65", "#CFDAD5", "#A3202F", "#FFFFFF", "#6E4B36", "#4A2F20", "#FFFFFF", "#D5DDD9", "#DCE6E1", "#2F5D4E", ["#BFD8C9", "#E8C3C3", "#CFDCE8", "#E6DDB8", "#D6CDE0"]),
+      dark:  P("#111916", "#1A2420", "#E8F0EC", "#9DB0A8", "#2D3B36", "#E0566A", "#1A0508", "#4A3326", "#2E1F16", "#E6ECE9", "#B9C6C0", "#2A3A34", "#6FA58F", ["#2F5446", "#5E2E33", "#33475A", "#58502E", "#4A3F58"]) },
+    { id: "spring", label: "Spring",
+      light: P("#F6F1EC", "#FFFCF9", "#2A2522", "#6D625C", "#E3D8D0", "#B8506F", "#FFFFFF", "#C9A27E", "#9C7652", "#FFFDFB", "#E6DCD4", "#EDE3D8", "#6F805C", ["#CFE0C3", "#F2CBD3", "#F3E1B5", "#CFE1E8", "#E0D2EA"]),
+      dark:  P("#1A1716", "#24201E", "#F3ECE7", "#B5A8A0", "#3B3330", "#E88AA7", "#2A0D16", "#6B5440", "#4A3A2B", "#EEE8E2", "#C8BDB4", "#3A332D", "#9FB08A", ["#43553A", "#63404A", "#5E5232", "#344F59", "#4E425C"]) },
+    { id: "summer", label: "Summer",
+      light: P("#F5EEDC", "#FFFBF1", "#1F2A33", "#5E6870", "#E2D6BC", "#1F6FA8", "#FFFFFF", "#B88A57", "#8A6235", "#FFFDF6", "#E5DCC6", "#F2E3BE", "#2E5E7E", ["#F6D677", "#A9D3E8", "#F4B7A0", "#BFE0B4", "#E3C9EE"]),
+      dark:  P("#13191E", "#1C242B", "#EEF2F4", "#A3AFB8", "#2E3A44", "#5BB0E8", "#04121D", "#5E4529", "#3E2C19", "#EAEFF2", "#BFC9D0", "#2B3640", "#7FB3D3", ["#6B5A1F", "#23506A", "#6A3B2C", "#3A5A31", "#55406A"]) },
+    { id: "party", label: "Party",
+      light: P("#EEEDF6", "#FBFAFF", "#1B1A3A", "#5F5D80", "#D7D5E8", "#C81E66", "#FFFFFF", "#2C2F5E", "#1B1D40", "#FFFFFF", "#DAD8EA", "#E9E6F4", "#A87F14", ["#F3D57A", "#F5B3CF", "#B8C4F2", "#A8E0D4", "#E4C1F0"]),
+      dark:  P("#0F1028", "#181A38", "#F2F0FF", "#A9A7CC", "#2B2D52", "#FF5C9E", "#2A0414", "#2A2D63", "#12143A", "#ECEBF7", "#BDBBD6", "#262955", "#E2B53C", ["#6B5513", "#6E2447", "#33407A", "#1F5A51", "#5B3570"]) },
+    { id: "simple", label: "Simple",
+      light: P("#F6F6F4", "#FFFFFF", "#222222", "#66676B", "#DFDFDC", "#3A3D42", "#FFFFFF", "#D9BF98", "#B39468", "#FFFFFF", "#E2E2DF", "#ECEBE8", "#6E6F73", ["#DCE3EA", "#E8DED3", "#DDE7DA", "#EADBDD", "#E6E2D0"]),
+      dark:  P("#161616", "#202020", "#EDEDED", "#A6A6A6", "#333333", "#E4E4E4", "#161616", "#6A5A43", "#4A3E2D", "#EDEDED", "#C2C2C2", "#2C2C2C", "#9A9A9A", ["#33404D", "#4D4136", "#3A4A37", "#4D383B", "#4A4532"]) },
+  ];
+  const themeById = id => THEMES.find(t => t.id === id) || THEMES[0];
+  const darkMedia = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => document.documentElement.dataset.theme === "dark" || (darkMedia.matches && document.documentElement.dataset.theme !== "light");
+  const palette = t => (isDark() ? t.dark : t.light);
+  const cssVars = p => Object.entries(p).map(([k, v]) => `--${k}:${v};`).join("");
+  let shownTheme = "harvest";
+  function applyTheme(id) {
+    const t = themeById(id);
+    shownTheme = t.id;
+    $("themeVars").textContent =
+      `:root{${cssVars(t.light)}}` +
+      `@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){${cssVars(t.dark)}}}` +
+      `:root[data-theme="dark"]{${cssVars(t.dark)}}`;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = palette(t).bg;
+  }
+  darkMedia.addEventListener && darkMedia.addEventListener("change", () => { applyTheme(shownTheme); if (state.view === "home") renderHome(); });
+
+  // ---------- state ----------
   const state = {
-    mode: "loading",      // loading | shared | local | signedout
+    view: "loading",      // loading | event | home | missing
+    eventId: null,
+    event: null,
     guests: [],
-    canWrite: true,
+    guestsLoaded: false,
+    uid: null,
     isHost: false,
-    me: null,
     slow: false,
+    loadError: null,
   };
 
-  // ---------- per-device memory of "my" entries ----------
+  // ---------- small helpers ----------
+  const LS = {
+    get(k, def) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? def : v; } catch { return def; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const firstName = s => s.trim().split(/\s+/)[0];
+  const initials = s => {
+    const parts = s.trim().split(/\s+/).filter(Boolean);
+    const a = parts[0] ? Array.from(parts[0])[0] : "";
+    const b = parts[1] ? Array.from(parts[1])[0] : "";
+    return (a + b).toUpperCase() || "?";
+  };
+  // Codes without look-alike letters (no l, o, 0 or 1).
+  function randomId(n) {
+    const abc = "abcdefghijkmnpqrstuvwxyz23456789";
+    const bytes = new Uint8Array(n);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, b => abc[b % abc.length]).join("");
+  }
+  const pageUrl = () => location.origin + location.pathname;
+  const eventUrl = id => pageUrl() + "?e=" + encodeURIComponent(id);
+  const hostUrl = (id, key) => eventUrl(id) + "&host=" + encodeURIComponent(key);
+  const homeUrl = () => pageUrl() + "?home";
+
+  // ---------- dates and places ----------
+  function parseDate(s) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+  }
+  function fmtTime(t) {
+    const m = /^(\d{2}):(\d{2})$/.exec(t || "");
+    if (!m) return "";
+    const h = +m[1];
+    return `${h % 12 || 12}:${m[2]} ${h >= 12 ? "pm" : "am"}`;
+  }
+  function fmtWhen(ev, short) {
+    const d = parseDate(ev.date);
+    if (!d) return "";
+    const ds = d.toLocaleDateString("en-US", short
+      ? { weekday: "short", month: "short", day: "numeric" }
+      : { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    const t = fmtTime(ev.time);
+    return t ? `${ds} · ${t}` : ds;
+  }
+  function isPast(ev) {
+    const d = parseDate(ev.date);
+    if (!d) return false;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    return d < today;
+  }
+  const shortAddress = a => a.replace(/,\s*[A-Z]{2}\s*\d{5}(-\d{4})?\s*$/, "").replace(/,\s*(USA|United States)\s*$/i, "");
+  const mapUrl = a => /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)
+    ? "https://maps.apple.com/?q=" + encodeURIComponent(a)
+    : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(a);
+
+  // ---------- per-device memory ----------
+  // RSVPs this phone made (older entries have no sign-in id).
   const MINE_KEY = "fg-mine-v1";
-  function readMine() {
-    try { const v = JSON.parse(localStorage.getItem(MINE_KEY) || "[]"); return Array.isArray(v) ? v : []; }
-    catch { return []; }
+  const readMine = () => { const v = LS.get(MINE_KEY, []); return Array.isArray(v) ? v : []; };
+  function markMine(id) { const m = readMine(); if (!m.includes(id)) { m.push(id); LS.set(MINE_KEY, m); } }
+  function unmarkMine(id) { LS.set(MINE_KEY, readMine().filter(x => x !== id)); }
+  // An RSVP with a sign-in id belongs to that phone. Older RSVPs use the list above.
+  const isMine = g => (g.by && state.uid ? g.by === state.uid : readMine().includes(g.id));
+
+  // My events: the events this phone created or opened.
+  const MY_KEY = "dc-my-events-v1";
+  const myEvents = () => { const v = LS.get(MY_KEY, {}); return v && typeof v === "object" ? v : {}; };
+  function rememberEvent(id, ev, host) {
+    const all = myEvents();
+    all[id] = {
+      role: host ? "host" : "guest",
+      title: ev.title, date: ev.date, time: ev.time, theme: ev.theme,
+      seen: Date.now(),
+    };
+    LS.set(MY_KEY, all);
   }
-  function markMine(id) {
-    const m = readMine();
-    if (!m.includes(id)) m.push(id);
-    try { localStorage.setItem(MINE_KEY, JSON.stringify(m)); } catch {}
-  }
-  function unmarkMine(id) {
-    try { localStorage.setItem(MINE_KEY, JSON.stringify(readMine().filter(x => x !== id))); } catch {}
-  }
-  const isMine = g => readMine().includes(g.id) || (!!state.me && g.by === state.me);
+  function forgetEvent(id) { const all = myEvents(); delete all[id]; LS.set(MY_KEY, all); }
+
+  // Host link keys this phone knows.
+  const KEYS_KEY = "dc-host-keys-v1";
+  const hostKeys = () => { const v = LS.get(KEYS_KEY, {}); return v && typeof v === "object" ? v : {}; };
+  function saveHostKey(id, key) { const all = hostKeys(); all[id] = key; LS.set(KEYS_KEY, all); }
 
   // ---------- data cleaning (shared data is untrusted) ----------
   function clean(id, d) {
@@ -520,21 +885,26 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
       by: typeof d.by === "string" ? d.by : null,
     };
   }
+  function cleanEvent(d) {
+    if (!d || typeof d !== "object") return null;
+    const s = (v, n) => String(v || "").trim().slice(0, n);
+    const title = s(d.title, 60);
+    if (!title) return null;
+    return {
+      title,
+      hosts: s(d.hosts, 60),
+      date: /^\d{4}-\d{2}-\d{2}$/.test(d.date) ? d.date : "",
+      time: /^\d{2}:\d{2}$/.test(d.time) ? d.time : "",
+      address: s(d.address, 120),
+      note: s(d.note, 200),
+      theme: THEMES.some(t => t.id === d.theme) ? d.theme : "harvest",
+      owners: Array.isArray(d.owners) ? d.owners.filter(x => typeof x === "string") : [],
+      createdAt: Number(d.createdAt) || 0,
+    };
+  }
   function setGuests(list) {
     state.guests = list.filter(Boolean).sort((a, b) => (a.createdAt - b.createdAt) || (a.id < b.id ? -1 : 1));
   }
-  // ---------- Firebase (shared guest list when the page is on GitHub Pages) ----------
-  // Paste your Firebase web app settings here. While this is null, the page saves
-  // entries only in each visitor's own browser.
-  const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyAlYJMqkYgrdURSVch_hyJ8qLO0CGc6nE0",
-    authDomain: "dishcord-61918.firebaseapp.com",
-    projectId: "dishcord-61918",
-    storageBucket: "dishcord-61918.firebasestorage.app",
-    messagingSenderId: "168243268040",
-    appId: "1:168243268040:web:b222c1717fff94dd8f58fd",
-  };
-  const FIREBASE_SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
 
   // Firestore REST values -> plain JSON
   function fromFs(v) {
@@ -548,158 +918,222 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     return null;
   }
 
+  // ---------- storage: Firebase ----------
+  // Reads use plain web requests, so pages fill in fast. Live updates and all
+  // saving go through the Firebase library. Each phone gets a free anonymous
+  // sign-in the first time it saves something, so the rules can tell phones apart.
   function firebaseStore() {
-    let live = false;
-    const timer = setTimeout(() => { state.slow = true; render(); }, 10000);
-    const loaded = () => {
-      clearTimeout(timer);
-      state.slow = false;
-      state.loadError = null;
-      if (state.mode === "loading") state.mode = "shared";
-      render();
-    };
+    const cfg = FIREBASE_CONFIG;
+    const base = "https://firestore.googleapis.com/v1/projects/" + cfg.projectId + "/databases/(default)/documents/";
+    const rest = path => fetch(base + path + (path.includes("?") ? "&" : "?") + "key=" + cfg.apiKey).then(r => {
+      if (r.status === 404) return null;
+      if (!r.ok) throw Object.assign(new Error("HTTP " + r.status), { code: r.status === 403 ? "permission-denied" : "unavailable" });
+      return r.json();
+    });
+    const docData = d => fromFs({ mapValue: { fields: d.fields || {} } });
+    const guestPath = eventId => (eventId === LEGACY_ID ? "guests" : "events/" + eventId + "/guests");
 
-    // 1. Fast first load: one plain HTTPS request, so the table fills in about a second.
-    const url = "https://firestore.googleapis.com/v1/projects/" + FIREBASE_CONFIG.projectId +
-      "/databases/(default)/documents/guests?pageSize=300&key=" + FIREBASE_CONFIG.apiKey;
-    fetch(url)
-      .then(r => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then(j => {
-        if (live) return;
-        setGuests((j.documents || []).map(d => clean(d.name.split("/").pop(), fromFs({ mapValue: { fields: d.fields } }))));
-        loaded();
-      })
-      .catch(() => {});
-
-    // 2. Live updates and saving through the Firebase library.
-    //    Long polling avoids the 30–40 second stall some phones and networks have with streaming.
     const sdk = (async () => {
-      const [{ initializeApp }, fs] = await Promise.all([
+      const [{ initializeApp }, fs, au] = await Promise.all([
         import(FIREBASE_SDK + "firebase-app.js"),
         import(FIREBASE_SDK + "firebase-firestore.js"),
+        import(FIREBASE_SDK + "firebase-auth.js"),
       ]);
-      const app = initializeApp(FIREBASE_CONFIG);
+      const app = initializeApp(cfg);
+      // Long polling avoids the 30–40 second stall some phones have with streaming.
       const db = fs.initializeFirestore(app, { experimentalForceLongPolling: true });
-      const col = fs.collection(db, "guests");
-      fs.onSnapshot(col, snap => {
-        if (snap.metadata.fromCache && !live) return;
-        live = true;
-        setGuests(snap.docs.map(d => clean(d.id, d.data())));
-        loaded();
-      }, () => {
-        if (state.mode !== "loading") return; // the first load worked; keep showing it
-        clearTimeout(timer);
-        state.slow = false;
-        state.loadError = "error";
-        render();
-      });
-      return { fs, col };
+      const auth = au.initializeAuth(app, { persistence: [au.indexedDBLocalPersistence, au.browserLocalPersistence] });
+      const first = new Promise(res => { const off = au.onAuthStateChanged(auth, u => { off(); res(u); }); });
+      return { fs, au, db, auth, first };
     })();
     sdk.catch(() => {});
 
+    const guestCol = (s, eventId) => s.fs.collection(s.db, ...guestPath(eventId).split("/"));
+    async function knownUid() {
+      const s = await sdk; await s.first;
+      return s.auth.currentUser ? s.auth.currentUser.uid : null;
+    }
+    async function ensureUid() {
+      const s = await sdk; await s.first;
+      if (s.auth.currentUser) return s.auth.currentUser.uid;
+      const cred = await s.au.signInAnonymously(s.auth);
+      return cred.user.uid;
+    }
+
     return {
-      start() {},
-      async save(id, data) {
-        const { fs, col } = await sdk;
-        const ref = id ? fs.doc(col, id) : fs.doc(col);
-        await fs.setDoc(ref, data);
-        return ref.id;
+      knownUid,
+      ensureUid,
+      async getEvent(id) {
+        const j = await rest("events/" + encodeURIComponent(id));
+        return j ? cleanEvent(docData(j)) : null;
       },
-      async remove(id) {
-        const { fs, col } = await sdk;
-        await fs.deleteDoc(fs.doc(col, id));
+      watchGuests(eventId, onData, onErr) {
+        let live = false;
+        rest(guestPath(eventId) + "?pageSize=300")
+          .then(j => { if (!live) onData(((j && j.documents) || []).map(d => clean(d.name.split("/").pop(), docData(d)))); })
+          .catch(() => {});
+        sdk.then(s => {
+          s.fs.onSnapshot(guestCol(s, eventId), snap => {
+            if (snap.metadata.fromCache && !live) return;
+            live = true;
+            onData(snap.docs.map(d => clean(d.id, d.data())));
+          }, onErr);
+        }).catch(onErr);
       },
-    };
-  }
-
-  // ---------- storage: shared (db) or this-browser-only (local) ----------
-  let store = null;
-
-  function localStore() {
-    const KEY = "fg-local-v1";
-    const load = () => {
-      try { const v = JSON.parse(localStorage.getItem(KEY) || "{}"); return v && typeof v === "object" ? v : {}; }
-      catch { return {}; }
-    };
-    const persist = v => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch {} };
-    const sync = () => {
-      const v = load();
-      setGuests(Object.entries(v.guests || {}).map(([id, d]) => clean(id, d)));
-      render();
-    };
-    return {
-      start: sync,
-      async save(id, data) {
-        const v = load(); v.guests = v.guests || {};
-        id = id || "g" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-        v.guests[id] = data; persist(v); sync(); return id;
+      async guestCount(eventId) {
+        const j = await rest(guestPath(eventId) + "?pageSize=300&mask.fieldPaths=party");
+        return ((j && j.documents) || []).reduce((t, d) => t + Math.min(MAX_PARTY, Math.max(1, Number(docData(d).party) || 1)), 0);
       },
-      async remove(id) { const v = load(); if (v.guests) delete v.guests[id]; persist(v); sync(); },
-    };
-  }
-
-  function sharedStore(db) {
-    const col = db.collection("guests");
-    const retry = async fn => {
-      try { return await fn(); }
-      catch (e) {
-        if (e && e.code === "unavailable") {
-          await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
-          return fn();
+      async createEvent(data) {
+        const uid = await ensureUid();
+        const s = await sdk;
+        const id = randomId(10), key = randomId(24);
+        const b = s.fs.writeBatch(s.db);
+        b.set(s.fs.doc(s.db, "events", id), { ...data, owners: [uid] });
+        b.set(s.fs.doc(s.db, "events", id, "keys", key), { createdAt: Date.now() });
+        await b.commit();
+        return { id, key, uid };
+      },
+      async updateEvent(id, data) {
+        await ensureUid();
+        const s = await sdk;
+        await s.fs.updateDoc(s.fs.doc(s.db, "events", id), data);
+      },
+      async deleteEvent(id) {
+        await ensureUid();
+        const s = await sdk;
+        for (const sub of ["guests", "keys", "claims"]) {
+          const snap = await s.fs.getDocs(s.fs.collection(s.db, "events", id, sub));
+          await Promise.all(snap.docs.map(d => s.fs.deleteDoc(d.ref)));
         }
-        throw e;
-      }
-    };
-    return {
-      start() {
-        const timer = setTimeout(() => { state.slow = true; render(); }, 10000);
-        col.onSnapshot(snap => {
-          setGuests(snap.docs.map(d => clean(d.id, d.data())));
-          if (!snap.metadata.fromCache) { clearTimeout(timer); state.slow = false; }
-          if (state.mode === "loading") state.mode = "shared";
-          render();
-        }, err => {
-          clearTimeout(timer);
-          state.slow = false;
-          state.loadError = err && err.code === "revoked" ? "revoked" : "error";
-          render();
-        });
+        await s.fs.deleteDoc(s.fs.doc(s.db, "events", id));
       },
-      async save(id, data) {
-        const ref = id ? col.doc(id) : col.doc();
-        await retry(() => ref.set(data));
+      async claimHost(id, key) {
+        const uid = await ensureUid();
+        const s = await sdk;
+        const b = s.fs.writeBatch(s.db);
+        b.set(s.fs.doc(s.db, "events", id, "claims", uid), { key });
+        b.update(s.fs.doc(s.db, "events", id), { owners: s.fs.arrayUnion(uid) });
+        await b.commit();
+        return uid;
+      },
+      async hostKey(id) {
+        const s = await sdk;
+        const snap = await s.fs.getDocs(s.fs.collection(s.db, "events", id, "keys"));
+        return snap.docs[0] ? snap.docs[0].id : null;
+      },
+      async saveGuest(eventId, gid, data) {
+        const uid = await ensureUid();
+        const s = await sdk;
+        const col = guestCol(s, eventId);
+        const ref = gid ? s.fs.doc(col, gid) : s.fs.doc(col);
+        await s.fs.setDoc(ref, { ...data, by: data.by || uid });
         return ref.id;
       },
-      async remove(id) { await retry(() => col.doc(id).delete()); },
+      async removeGuest(eventId, gid) {
+        await ensureUid();
+        const s = await sdk;
+        await s.fs.deleteDoc(s.fs.doc(guestCol(s, eventId), gid));
+      },
     };
   }
+
+  // ---------- storage: this browser only (for testing) ----------
+  // Add ?localuid=name to the address to act as a different phone.
+  function localStore() {
+    const KEY = "dc-local-v2";
+    const load = () => {
+      const v = LS.get(KEY, {});
+      v.events = v.events || {}; v.guests = v.guests || {}; v.keys = v.keys || {};
+      return v;
+    };
+    const save = v => { LS.set(KEY, v); watchers.forEach(w => w()); };
+    const denied = () => Object.assign(new Error("denied"), { code: "permission-denied" });
+    const watchers = [];
+    window.addEventListener("storage", e => { if (e.key === KEY) watchers.forEach(w => w()); });
+    const asUid = new URLSearchParams(location.search).get("localuid");
+    if (asUid) LS.set("dc-local-uid", asUid);
+    let uid = asUid || LS.get("dc-local-uid", null);
+    const knownUid = async () => uid;
+    const ensureUid = async () => {
+      if (!uid) { uid = "u" + randomId(8); LS.set("dc-local-uid", uid); }
+      return uid;
+    };
+    const owner = (v, id, u) => !!(v.events[id] && (v.events[id].owners || []).includes(u));
+    return {
+      knownUid, ensureUid,
+      async getEvent(id) { const e = load().events[id]; return e ? cleanEvent(e) : null; },
+      watchGuests(eventId, onData) {
+        const push = () => onData(Object.entries(load().guests[eventId] || {}).map(([id, d]) => clean(id, d)));
+        watchers.push(push);
+        setTimeout(push, 0);
+      },
+      async guestCount(eventId) {
+        return Object.values(load().guests[eventId] || {}).reduce((t, g) => t + (Number(g.party) || 1), 0);
+      },
+      async createEvent(data) {
+        const u = await ensureUid();
+        const v = load();
+        const id = randomId(10), key = randomId(24);
+        v.events[id] = { ...data, owners: [u] };
+        v.keys[id] = [key];
+        save(v);
+        return { id, key, uid: u };
+      },
+      async updateEvent(id, data) {
+        const u = await ensureUid(); const v = load();
+        if (!owner(v, id, u)) throw denied();
+        v.events[id] = { ...v.events[id], ...data }; save(v);
+      },
+      async deleteEvent(id) {
+        const u = await ensureUid(); const v = load();
+        if (!owner(v, id, u)) throw denied();
+        delete v.events[id]; delete v.guests[id]; delete v.keys[id]; save(v);
+      },
+      async claimHost(id, key) {
+        const u = await ensureUid(); const v = load();
+        if (!v.events[id] || !(v.keys[id] || []).includes(key)) throw denied();
+        const o = v.events[id].owners || [];
+        if (!o.includes(u)) o.push(u);
+        v.events[id].owners = o; save(v);
+        return u;
+      },
+      async hostKey(id) {
+        const u = await ensureUid(); const v = load();
+        return owner(v, id, u) ? (v.keys[id] || [])[0] || null : null;
+      },
+      async saveGuest(eventId, gid, data) {
+        const u = await ensureUid(); const v = load();
+        if (eventId !== LEGACY_ID && !v.events[eventId]) throw denied();
+        const list = v.guests[eventId] = v.guests[eventId] || {};
+        if (gid && list[gid] && eventId !== LEGACY_ID && list[gid].by !== u) throw denied();
+        gid = gid || "g" + randomId(12);
+        list[gid] = { ...data, by: data.by || u };
+        save(v);
+        return gid;
+      },
+      async removeGuest(eventId, gid) {
+        const u = await ensureUid(); const v = load();
+        const g = (v.guests[eventId] || {})[gid];
+        if (g && eventId !== LEGACY_ID && g.by !== u && !owner(v, eventId, u)) throw denied();
+        if (v.guests[eventId]) delete v.guests[eventId][gid];
+        save(v);
+      },
+    };
+  }
+
+  const store = FIREBASE_CONFIG ? firebaseStore() : localStore();
 
   function writeErrorMessage(err) {
-    const code = err && err.code;
-    if (code === "invalid_argument" || code === "not_granted" || code === "revoked") {
-      state.canWrite = false; render();
-      return "Your link lets you see the table but not change it. Ask the host to add you as an editor.";
+    const code = (err && err.code) || "";
+    if (code === "auth/operation-not-allowed" || code === "auth/admin-restricted-operation" || code === "auth/configuration-not-found") {
+      return "Saving is not turned on yet. The site owner must turn on anonymous sign-in in Firebase.";
     }
-    if (code === "quota_exceeded") return "The guest list is full. Ask the host to remove old entries.";
-    if (code === "permission-denied") return "The guest list didn't accept this entry. Check the names and dishes, then try again.";
+    if (code === "permission-denied") return "This change was not accepted. Reload the page and try again.";
     return "That didn't save. Check your connection and try again.";
   }
 
-  // ---------- helpers ----------
-  const el = (tag, cls, text) => {
-    const n = document.createElement(tag);
-    if (cls) n.className = cls;
-    if (text != null) n.textContent = text;
-    return n;
-  };
-  const firstName = s => s.trim().split(/\s+/)[0];
-  const initials = s => {
-    const parts = s.trim().split(/\s+/).filter(Boolean);
-    const a = parts[0] ? Array.from(parts[0])[0] : "";
-    const b = parts[1] ? Array.from(parts[1])[0] : "";
-    return (a + b).toUpperCase() || "?";
-  };
-  const canJoin = () => state.mode !== "signedout" && state.canWrite && !state.loadError;
+  const canJoin = () => state.view === "event" && !!state.event && !state.loadError;
 
   let toastTimer;
   function toast(msg) {
@@ -711,20 +1145,38 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
 
   // ---------- render ----------
   function render() {
-    renderHeader();
-    renderTable();
-    renderMenu();
+    for (const v of ["eventView", "homeView", "missingView"]) $(v).hidden = state.view + "View" !== v;
+    if (state.view === "event") {
+      renderEventHeader();
+      renderTable();
+      renderMenu();
+    } else if (state.view === "home") {
+      renderHome();
+    }
     renderCta();
   }
 
-  function renderHeader() {
+  function renderEventHeader() {
+    const ev = state.event;
+    $("evName").textContent = ev ? ev.title : "Loading event…";
+    $("evHosts").textContent = ev && ev.hosts ? "Hosted by " + ev.hosts : "";
+    $("evHosts").hidden = !(ev && ev.hosts);
+    $("evWhen").textContent = ev ? fmtWhen(ev, false) : "";
+    const w = $("whereLink");
+    w.hidden = !(ev && ev.address);
+    if (ev && ev.address) {
+      $("whereText").textContent = shortAddress(ev.address);
+      w.href = mapUrl(ev.address);
+    }
+    $("evNote").textContent = ev ? ev.note : "";
+    $("evNote").hidden = !(ev && ev.note);
+    $("hostBar").hidden = !state.isHost;
+    if (ev) document.title = ev.title + " · Dishcord";
+
     const n = $("notice");
     let msg = "";
-    if (state.mode === "signedout") msg = "Sign in to claude.ai to see who's coming and save your seat.";
-    else if (state.loadError === "revoked") msg = "You no longer have access to this table.";
-    else if (state.loadError) msg = "The guest list didn't load. Reload the page to try again.";
-    else if (state.slow) msg = "Still loading the guest list. Check your connection.";
-    else if (!state.canWrite) msg = "You can see the table but can't change it. Ask the host to add you as an editor.";
+    if (state.loadError) msg = "The guest list didn't load. Reload the page to try again.";
+    else if (state.slow && !state.guestsLoaded) msg = "Still loading the guest list. Check your connection.";
     n.textContent = msg; n.hidden = !msg;
   }
 
@@ -753,12 +1205,14 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     [/casserole|bake|lasagn|gratin|\bmac\b|stuffing|dressing|enchilada|yams|sweet potato|scalloped/i, "baking"],
     [/brownie|\bbars?\b|cake|cobbler|crisp|blondie|fudge|cookie/i, "pan"],
     [/turkey|\bham\b|roast|chicken|brisket|salmon|platter|charcuterie|board|tofurky|prime rib/i, "platter"],
+    [/deviled|crostini|bruschetta|cheese|cracker|wings|sliders|skewer|shrimp|pinwheel/i, "platter"],
     [/salad|soup|sauce|gravy|mashed|\bdip\b|chili|cranberr|slaw|beans|chips|popcorn/i, "bowl"],
     [/bread|\brolls?\b|biscuit|cornbread|muffin|croissant|baguette/i, "basket"],
     [/wine|beer|soda|seltzer|sparkling|bottle|champagne|kombucha/i, "bottles"],
     [/cider|punch|juice|lemonade|\btea\b|coffee|sangria|cocktail|water|nog/i, "pitcher"],
   ];
   const VESSEL_BY_KIND = {
+    appetizer: ["platter", "plate", "bowl"],
     main: ["platter", "baking"],
     side: ["bowl", "baking", "plate"],
     dessert: ["pie", "pan", "plate"],
@@ -826,8 +1280,6 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     }
     // Keep each side in RSVP order, so seats do not jump around when someone joins.
     for (const s of ["right", "left"]) sides[s].sort((a, b) => state.guests.indexOf(a) - state.guests.indexOf(b));
-    const rightN = count("right");
-    const leftN = count("left");
     // Each side needs room for its chairs plus a gap around each RSVP.
     const sideLen = s => count(s) * 80 + 30 * (sides[s].length + 1);
     const longSide = Math.max(sideLen("right"), sideLen("left"));
@@ -883,7 +1335,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     });
 
     if (!n) {
-      const msg = state.mode === "loading" ? "Setting the table…" : "No one is here yet. Tap I'm coming! below to take the first seat.";
+      const msg = !state.guestsLoaded ? "Setting the table…" : "No one is here yet. Tap I'm coming! below to take the first seat.";
       table.append(el("p", "table-empty", msg));
     } else if (!plates.length) {
       table.append(el("p", "table-empty", "Plates appear here as people add dishes."));
@@ -933,6 +1385,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   let lastSceneW = 0;
   if ("ResizeObserver" in window) {
     new ResizeObserver(() => {
+      if (state.view !== "event") return;
       const w = $("scene").clientWidth;
       if (w && Math.abs(w - lastSceneW) > 1) renderTable();
     }).observe($("scene"));
@@ -976,10 +1429,139 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   }
 
   function renderCta() {
-    const mine = state.guests.find(isMine);
     const bar = $("ctaBar");
-    bar.hidden = !canJoin() || state.mode === "loading";
-    $("ctaBtn").textContent = mine ? "Edit my RSVP" : "I'm coming!";
+    const btn = $("ctaBtn");
+    if (state.view === "home") {
+      bar.hidden = false;
+      btn.textContent = "Create event";
+    } else if (state.view === "event") {
+      bar.hidden = !canJoin() || !state.guestsLoaded;
+      btn.textContent = state.guests.find(isMine) ? "Edit my RSVP" : "I'm coming!";
+    } else {
+      bar.hidden = true;
+    }
+  }
+
+  // ---------- My events ----------
+  const homeInfo = {}; // id -> { count, gone }
+  function renderHome() {
+    const all = myEvents();
+    const ids = Object.keys(all);
+    const sortKey = id => {
+      const r = all[id];
+      const past = isPast(r);
+      return [past ? 1 : 0, past ? -(parseDate(r.date) || 0) : +(parseDate(r.date) || 0)];
+    };
+    const order = (a, b) => { const x = sortKey(a), y = sortKey(b); return x[0] - y[0] || x[1] - y[1]; };
+    const hosting = ids.filter(id => all[id].role === "host").sort(order);
+    const invited = ids.filter(id => all[id].role !== "host").sort(order);
+    $("hostingList").replaceChildren(...hosting.map(id => eventCard(id, all[id])));
+    $("invitedList").replaceChildren(...invited.map(id => eventCard(id, all[id])));
+    $("hostingSection").hidden = !hosting.length;
+    $("invitedSection").hidden = !invited.length;
+    $("homeEmpty").hidden = !!ids.length;
+  }
+  function eventCard(id, r) {
+    const info = homeInfo[id] || {};
+    const card = el("div", "ev-card" + (isPast(r) ? " past" : "") + (info.gone ? " gone" : ""));
+    const t = themeById(r.theme);
+    const sw = el("span", "ev-swatch");
+    sw.style.background = `linear-gradient(${palette(t).accent} 0 50%, ${palette(t).wood} 50% 100%)`;
+    const a = el("a");
+    a.href = "?e=" + encodeURIComponent(id);
+    a.append(el("span", "ev-title", r.title || "Untitled event"));
+    if (info.gone) {
+      a.removeAttribute("href");
+      a.append(el("span", "ev-when", "The host deleted this event."));
+    } else {
+      const bits = [fmtWhen(r, true)];
+      if (isPast(r)) bits.push("Past");
+      a.append(el("span", "ev-when", bits.filter(Boolean).join(" · ")));
+      if (info.count != null) a.append(el("span", "ev-count", info.count === 1 ? "1 person coming" : info.count + " people coming"));
+    }
+    const x = el("button", "ev-x", "×");
+    x.type = "button";
+    x.setAttribute("aria-label", "Remove " + (r.title || "this event") + " from my list");
+    x.addEventListener("click", () => { forgetEvent(id); renderHome(); toast("Removed from your list. The event still exists."); });
+    card.append(sw, a, x);
+    return card;
+  }
+  async function startHome() {
+    state.view = "home";
+    applyTheme("harvest");
+    document.title = "My events · Dishcord";
+    render();
+    const uid = await store.knownUid().catch(() => null);
+    await Promise.all(Object.keys(myEvents()).map(async id => {
+      try {
+        let ev = await store.getEvent(id);
+        if (!ev && id === LEGACY_ID) ev = { ...LEGACY_EVENT };
+        if (!ev) { homeInfo[id] = { gone: true }; renderHome(); return; }
+        const r = myEvents()[id];
+        if (r) rememberEvent(id, ev, (!!uid && ev.owners.includes(uid)) || (r.role === "host" && !ev.owners.length));
+        homeInfo[id] = { count: await store.guestCount(id) };
+        renderHome();
+      } catch {}
+    }));
+  }
+
+  // ---------- event page ----------
+  async function startEvent(id, params) {
+    state.view = "event";
+    state.eventId = id;
+    if (id === LEGACY_ID) state.event = { ...LEGACY_EVENT };
+    applyTheme(state.event ? state.event.theme : "harvest");
+    render();
+
+    const slowTimer = setTimeout(() => { state.slow = true; render(); }, 10000);
+    store.watchGuests(id, list => {
+      clearTimeout(slowTimer);
+      setGuests(list);
+      state.guestsLoaded = true;
+      state.slow = false;
+      state.loadError = null;
+      render();
+    }, () => {
+      if (state.guestsLoaded) return; // the first load worked; keep showing it
+      clearTimeout(slowTimer);
+      state.loadError = "error";
+      render();
+    });
+
+    let ev;
+    try { ev = await store.getEvent(id); } catch { ev = undefined; }
+    if (ev === null && id !== LEGACY_ID) { state.view = "missing"; render(); return; }
+    if (ev) state.event = ev;
+    if (!state.event) { state.loadError = "error"; render(); return; }
+    applyTheme(state.event.theme);
+    render();
+
+    // A private host link makes this phone a host.
+    const key = params.get("host");
+    if (key) {
+      try {
+        const uid = await store.ensureUid();
+        if (!state.event.owners.includes(uid)) {
+          await store.claimHost(id, key);
+          state.event.owners.push(uid);
+        }
+        saveHostKey(id, key);
+        toast("You're now a host of this event.");
+      } catch {
+        toast("This host link didn't work. Ask the host for a new one.");
+      }
+      history.replaceState(null, "", "?e=" + encodeURIComponent(id));
+    }
+
+    state.uid = await store.knownUid().catch(() => null);
+    state.isHost = !!state.uid && state.event.owners.includes(state.uid);
+    rememberEvent(id, state.event, state.isHost);
+    render();
+
+    if (params.has("created")) {
+      history.replaceState(null, "", "?e=" + encodeURIComponent(id));
+      if (state.isHost) openShare();
+    }
   }
 
   // ---------- RSVP form ----------
@@ -1081,7 +1663,7 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     $("dishRows").replaceChildren();
     if (g && g.dishes.length) g.dishes.forEach(d => addDishRow(d)); else addDishRow(null);
     $("formErr").textContent = "";
-    disarmRemove();
+    disarm($("removeBtn"));
     $("removeBtn").hidden = !g;
     $("removeBtn").textContent = mine || !g ? "Remove my RSVP" : "Remove this RSVP";
     closeAll();
@@ -1118,15 +1700,15 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
       createdAt: editing ? editing.createdAt || now : now,
       updatedAt: now,
     };
-    const by = editing ? editing.by : state.me;
-    if (by) data.by = by;
+    if (editing && editing.by) data.by = editing.by;
     const btn = $("saveBtn");
     const label = btn.textContent;
     btn.disabled = true; btn.textContent = "Saving…";
     try {
       const wasNew = !editing;
-      const id = await store.save(editing && editing.id, data);
+      const id = await store.saveGuest(state.eventId, editing && editing.id, data);
       if (wasNew) markMine(id);
+      if (!state.uid) state.uid = await store.knownUid().catch(() => null);
       $("rsvpDlg").close();
       render();
       toast(wasNew ? `${firstName(data.name)} just slid into the table.` : "Changes saved.");
@@ -1137,29 +1719,28 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     }
   }
 
-  let armTimer;
-  function disarmRemove() {
-    clearTimeout(armTimer);
-    const b = $("removeBtn");
+  // Two-tap confirm for anything that removes data.
+  function disarm(b) {
+    clearTimeout(b._armTimer);
     b.classList.remove("armed");
     delete b.dataset.armed;
+    if (b.dataset.label) b.textContent = b.dataset.label;
   }
+  function armed(b) {
+    if (b.dataset.armed) { disarm(b); return true; }
+    b.dataset.label = b.textContent;
+    b.dataset.armed = "1";
+    b.classList.add("armed");
+    b.textContent = "Tap again to confirm";
+    b._armTimer = setTimeout(() => disarm(b), 4000);
+    return false;
+  }
+
   async function onRemove() {
-    const b = $("removeBtn");
-    if (!b.dataset.armed) {
-      b.dataset.armed = "1";
-      b.classList.add("armed");
-      b.textContent = "Tap again to remove";
-      armTimer = setTimeout(() => {
-        disarmRemove();
-        b.textContent = editing && !isMine(editing) ? "Remove this RSVP" : "Remove my RSVP";
-      }, 4000);
-      return;
-    }
-    disarmRemove();
+    if (!armed($("removeBtn"))) return;
     try {
       const id = editing.id;
-      await store.remove(id);
+      await store.removeGuest(state.eventId, id);
       unmarkMine(id);
       $("rsvpDlg").close();
       render();
@@ -1197,9 +1778,163 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
     }
     $("infoNote").textContent = g.note;
     $("infoNoteWrap").hidden = !g.note;
-    $("infoEdit").hidden = !canJoin();
+    // Only the person who made an RSVP can edit it. Old Friendsgiving RSVPs stay open to edit.
+    const canEdit = canJoin() && (mine || (state.eventId === LEGACY_ID && !g.by));
+    $("infoEdit").hidden = !canEdit;
+    $("infoErr").textContent = "";
+    disarm($("infoRemove"));
+    $("infoRemove").hidden = !(state.isHost && !mine);
     closeAll();
     $("infoDlg").showModal();
+  }
+  async function onHostRemove() {
+    if (!viewing || !armed($("infoRemove"))) return;
+    try {
+      await store.removeGuest(state.eventId, viewing.id);
+      $("infoDlg").close();
+      toast(groupLabel(viewing) + " removed from the table.");
+    } catch (err) {
+      $("infoErr").textContent = writeErrorMessage(err);
+    }
+  }
+
+  // ---------- create or edit an event ----------
+  let eventFormMode = "create";
+  let pickedTheme = "harvest";
+  let eventSaved = false;
+  function renderThemePicker() {
+    $("themePicker").replaceChildren(...THEMES.map(t => {
+      const p = palette(t);
+      const b = el("button", "theme-opt");
+      b.type = "button";
+      b.setAttribute("role", "radio");
+      b.setAttribute("aria-checked", String(t.id === pickedTheme));
+      b.dataset.theme = t.id;
+      for (const [k, v] of Object.entries({ "sw-bg": p.bg, "sw-ink": p.ink, "sw-wood": p.wood, "sw-edge": p["wood-edge"], "sw-accent": p.accent, "sw-chair": p["grp-1"], "sw-chair2": p["grp-2"], "sw-chairedge": p["chair-edge"] })) b.style.setProperty("--" + k, v);
+      const mini = el("span", "theme-mini");
+      mini.setAttribute("aria-hidden", "true");
+      mini.append(el("span", "t"), el("span", "c c1"), el("span", "c c2"), el("span", "c c3"), el("span", "c c4"), el("span", "pl"));
+      b.append(mini, el("span", "theme-name", t.label));
+      b.addEventListener("click", () => {
+        pickedTheme = t.id;
+        applyTheme(t.id);
+        renderThemePicker();
+        $("themePicker").querySelector(`[data-theme="${t.id}"]`).focus();
+      });
+      return b;
+    }));
+  }
+  function openEventForm(mode) {
+    eventFormMode = mode;
+    eventSaved = false;
+    const ev = mode === "edit" ? state.event : null;
+    $("eventDlgTitle").textContent = ev ? "Edit event" : "Create event";
+    $("eventSaveBtn").textContent = ev ? "Save changes" : "Create event";
+    $("e-title").value = ev ? ev.title : "";
+    $("e-hosts").value = ev ? ev.hosts : "";
+    $("e-date").value = ev ? ev.date : "";
+    $("e-time").value = ev ? ev.time : "";
+    $("e-address").value = ev ? ev.address : "";
+    $("e-note").value = ev ? ev.note : "";
+    pickedTheme = ev ? ev.theme : "harvest";
+    renderThemePicker();
+    $("eventErr").textContent = "";
+    disarm($("deleteEventBtn"));
+    // The original Friendsgiving list cannot be deleted from here, to keep its RSVPs safe.
+    $("deleteEventBtn").hidden = !ev || state.eventId === LEGACY_ID;
+    closeAll();
+    $("eventDlg").showModal();
+    if (!ev) $("e-title").focus();
+  }
+  async function onEventSave(e) {
+    e.preventDefault();
+    const title = $("e-title").value.trim().slice(0, 60);
+    const date = $("e-date").value;
+    if (!title) { $("eventErr").textContent = "Give the event a name."; $("e-title").focus(); return; }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { $("eventErr").textContent = "Pick a date for the event."; $("e-date").focus(); return; }
+    const time = /^\d{2}:\d{2}$/.test($("e-time").value) ? $("e-time").value : "";
+    const now = Date.now();
+    const data = {
+      title,
+      hosts: $("e-hosts").value.trim().slice(0, 60),
+      date, time,
+      address: $("e-address").value.trim().slice(0, 120),
+      note: $("e-note").value.trim().slice(0, 200),
+      theme: pickedTheme,
+      updatedAt: now,
+    };
+    const btn = $("eventSaveBtn");
+    const label = btn.textContent;
+    btn.disabled = true; btn.textContent = "Saving…";
+    try {
+      if (eventFormMode === "create") {
+        const { id, key } = await store.createEvent({ ...data, createdAt: now });
+        saveHostKey(id, key);
+        rememberEvent(id, data, true);
+        eventSaved = true;
+        location.href = eventUrl(id) + "&created=1";
+        return;
+      }
+      await store.updateEvent(state.eventId, data);
+      state.event = { ...state.event, ...data };
+      rememberEvent(state.eventId, state.event, true);
+      eventSaved = true;
+      $("eventDlg").close();
+      render();
+      toast("Event updated.");
+    } catch (err) {
+      $("eventErr").textContent = writeErrorMessage(err);
+    } finally {
+      btn.disabled = false; btn.textContent = label;
+    }
+  }
+  async function onEventDelete() {
+    if (!armed($("deleteEventBtn"))) return;
+    try {
+      await store.deleteEvent(state.eventId);
+      forgetEvent(state.eventId);
+      eventSaved = true;
+      location.href = homeUrl();
+    } catch (err) {
+      $("eventErr").textContent = writeErrorMessage(err);
+    }
+  }
+
+  // ---------- invite sheet ----------
+  async function openShare() {
+    const id = state.eventId;
+    $("shareLink").value = eventUrl(id);
+    $("shareBtn").hidden = !navigator.share;
+    $("hostLinkWrap").hidden = true;
+    closeAll();
+    $("shareDlg").showModal();
+    let key = hostKeys()[id];
+    if (!key) {
+      try { key = await store.hostKey(id); if (key) saveHostKey(id, key); } catch {}
+    }
+    if (key) {
+      $("hostLink").value = hostUrl(id, key);
+      $("hostLinkWrap").hidden = false;
+    }
+  }
+  async function copyText(input, btn) {
+    const text = input.value;
+    let ok = false;
+    try { await navigator.clipboard.writeText(text); ok = true; } catch {}
+    if (!ok) { input.select(); try { ok = document.execCommand("copy"); } catch {} }
+    const old = btn.dataset.label || btn.textContent;
+    btn.dataset.label = old;
+    btn.textContent = ok ? "Copied!" : "Select";
+    setTimeout(() => { btn.textContent = old; }, 1800);
+  }
+  function shareEvent() {
+    const ev = state.event;
+    const when = fmtWhen(ev, true);
+    navigator.share({
+      title: ev.title,
+      text: `You're invited: ${ev.title}${when ? " · " + when : ""}. Grab a seat and say what you're bringing.`,
+      url: eventUrl(state.eventId),
+    }).catch(() => {});
   }
 
   // ---------- wiring ----------
@@ -1211,40 +1946,50 @@ dialog.profile .sheet-inner { padding-top: 0; gap: 12px; }
   $("addPerson").addEventListener("click", () => { const i = addPersonRow(""); if (i) i.focus(); });
   $("addDish").addEventListener("click", () => { const i = addDishRow(null); if (i) i.focus(); });
   $("infoEdit").addEventListener("click", () => viewing && openForm(viewing));
-  $("ctaBtn").addEventListener("click", () => openForm(state.guests.find(isMine) || null));
+  $("infoRemove").addEventListener("click", onHostRemove);
+  $("ctaBtn").addEventListener("click", () => {
+    if (state.view === "home") openEventForm("create");
+    else openForm(state.guests.find(isMine) || null);
+  });
   $("f-name").addEventListener("keydown", e => {
     if (e.key === "Enter") { e.preventDefault(); const first = $("dishRows").querySelector("input"); if (first) first.focus(); }
   });
+  $("editEventBtn").addEventListener("click", () => openEventForm("edit"));
+  $("inviteBtn").addEventListener("click", openShare);
+  $("eventForm").addEventListener("submit", onEventSave);
+  $("deleteEventBtn").addEventListener("click", onEventDelete);
+  // Closing the event form without saving puts the old theme back.
+  $("eventDlg").addEventListener("close", () => {
+    if (!eventSaved) applyTheme(state.view === "event" && state.event ? state.event.theme : "harvest");
+  });
+  $("copyLinkBtn").addEventListener("click", () => copyText($("shareLink"), $("copyLinkBtn")));
+  $("copyHostBtn").addEventListener("click", () => copyText($("hostLink"), $("copyHostBtn")));
+  $("shareBtn").addEventListener("click", shareEvent);
+  ["shareLink", "hostLink"].forEach(id => $(id).addEventListener("focus", e => e.target.select()));
 
   // ---------- start ----------
-  // iPhones, iPads and Macs open the address in Apple Maps. Everyone else gets Google Maps.
-  if (/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)) {
-    $("whereLink").href = "https://maps.apple.com/?q=657%20Birch%20Ave%2C%20San%20Mateo%2C%20CA%2094402";
+  function addPlainLinkEvent() {
+    const add = PLAIN_LINK_ADDS;
+    if (!add) return;
+    const end = parseDate(add.until);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    if (!end || today > end) return;
+    const done = LS.get("dc-plain-added-v1", []);
+    if (done.includes(add.id)) return;
+    if (!myEvents()[add.id]) rememberEvent(add.id, add.id === LEGACY_ID ? LEGACY_EVENT : { title: "Event", date: add.until, time: "", theme: "harvest" }, false);
+    LS.set("dc-plain-added-v1", [...done, add.id]);
   }
 
-  async function start() {
-    render();
-    const hasViewer = !!(window.claude && typeof window.claude.use === "function");
-    if (!hasViewer && FIREBASE_CONFIG) {
-      store = firebaseStore();
-      return;
+  function start() {
+    const params = new URLSearchParams(location.search);
+    const asked = (params.get("e") || "").trim();
+    if (params.has("home") || !asked) {
+      if (!asked && !params.has("home")) addPlainLinkEvent();
+      return startHome();
     }
-    if (!hasViewer) {
-      state.mode = "local";
-      store = localStore();
-      store.start();
-      return;
-    }
-    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
-    if (user) {
-      const [id, owner, w] = await Promise.all([user.id(), user.isOwner(), user.can("data.write")]);
-      state.me = id;
-      state.isHost = owner;
-      if (w === false) state.canWrite = false;
-    }
-    if (!db) { state.mode = "signedout"; render(); return; }
-    store = sharedStore(db);
-    store.start();
+    const id = asked;
+    if (!/^[a-z0-9-]{3,40}$/i.test(id)) { state.view = "missing"; render(); return; }
+    return startEvent(id, params);
   }
   start();
 })();
